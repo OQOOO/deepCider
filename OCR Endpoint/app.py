@@ -33,32 +33,12 @@ async def ocr_endpoint(file: UploadFile = File(...)):
     for line in result[0]:
         detected_text.append({
             "text": line[1][0],  # 감지된 텍스트
-            "confidence": line[1][1]  # 신뢰도
+            "confidence": line[1][1],  # 신뢰도
+            "bounding_box": line[0]  # 바운딩 박스 좌표
         })
 
     # 결과 반환
     return JSONResponse(content={"success": True, "message": "OCR 처리 완료", "data": detected_text})
-
-# # PaddleOCR 인스턴스 생성 (한국어 설정)
-# async def processing():
-#     ocr = PaddleOCR(use_angle_cls=False, lang='korean')  # 또는 lang='ko'
-
-#     # 이미지 파일로 텍스트 추출
-#     img_path = 'example01.jpg'
-
-#     result = ocr.ocr(img_path, cls=True)
-
-#     # 결과 출력
-#     for line in result[0]:
-#         print(f"Detected text: {line[1][0]} with confidence: {line[1][1]}")
-
-# @app.post("/ocr")
-# async def ocr(file: UploadFile = File(...)):
-
-#     if not file:
-#         return JSONResponse(content={"success": False, "message": "파일이 업로드되지 않았습니다."}, status_code=400)
-
-#     return JSONResponse(content={"success": True, "filename": file.filename, "message": "파일 업로드 성공"})
 
 
 '''
