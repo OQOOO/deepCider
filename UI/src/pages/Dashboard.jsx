@@ -3,7 +3,7 @@ import React from 'react';
 const Dashboard = () => {
     return (
         <div>
-            대시보드
+            종합 AI 서비스 플랫폼입니다.
         </div>
     )
 };

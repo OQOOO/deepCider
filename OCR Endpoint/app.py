@@ -30,12 +30,14 @@ async def ocr_endpoint(file: UploadFile = File(...)):
 
     # OCR 결과 추출
     detected_text = []
-    for line in result[0]:
-        detected_text.append({
-            "text": line[1][0],  # 감지된 텍스트
-            "confidence": line[1][1],  # 신뢰도
-            "bounding_box": line[0]  # 바운딩 박스 좌표
-        })
+
+    if result != [None]:
+        for line in result[0]:
+            detected_text.append({
+                "text": line[1][0],  # 감지된 텍스트
+                "confidence": line[1][1],  # 신뢰도
+                "bounding_box": line[0]  # 바운딩 박스 좌표
+            })
 
     # 결과 반환
     return JSONResponse(content={"success": True, "message": "OCR 처리 완료", "data": detected_text})

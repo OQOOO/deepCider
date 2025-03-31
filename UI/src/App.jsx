@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import Box from '@mui/material/Box';
+import { LaptopOutlined, UserOutlined, FontColorsOutlined, GatewayOutlined  
+} from '@ant-design/icons';
 
 import ValidateLogic from './pages/ValidateLogic.jsx'
 import Dashboard from './pages/Dashboard.jsx';
 import OCR from './pages/OCR.jsx';
+import ObjectDetection from './pages/ObjectDetection.jsx';
+
 import logo from './assets/react.svg'
 
 const componentsMap = {
   "dashboard": <Dashboard></Dashboard>,
   "validateLogic": <ValidateLogic/>,
-  "OCR": <OCR></OCR>
+  "OCR": <OCR></OCR>,
+  "objectDetection": <ObjectDetection></ObjectDetection>,
 }
 
 
@@ -28,24 +33,24 @@ const items2 = [
     label: '소개', // 첫 번째 서브 메뉴 이름
     children: [
       { key: 'dashboard', label: 'dashboard' }, // 첫 번째 서브 메뉴의 첫 번째 항목
-      { key: '1-2', label: '2' } // 첫 번째 서브 메뉴의 두 번째 항목
+      { key: '1-2', label: '2' }
     ]
   },
   {
     key: 'sub2', // 두 번째 항목의 key
-    icon: React.createElement(LaptopOutlined),
-    label: 'LLM Service',
+    icon: React.createElement(FontColorsOutlined ),
+    label: '언어모델',
     children: [
       { key: 'validateLogic', label: '논리적 오류 찾기' },
-      { key: '2-2', label: 'test' },
     ]
   },
   {
     key: 'sub3',
-    icon: React.createElement(NotificationOutlined),
-    label: 'CNN Service',
+    icon: React.createElement(GatewayOutlined ),
+    label: '이미지 모델',
     children: [
-      { key: 'OCR', label: '글자 추출' }
+      { key: 'OCR', label: '글자 추출' },
+      { key: 'objectDetection', label: '물체 탐지' }
     ]
   }
 ];
@@ -66,12 +71,15 @@ const App = () => {
         }}
       >
         <div className="demo-logo">
-          <img src={logo} alt="logo"></img>
+          {/* <img src={logo} alt="logo"></img> */}
+          <Box sx={{color:'white', width: 170}}>
+            <h2>deepCider</h2>
+          </Box>
         </div>
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['2']}
+          defaultSelectedKeys={['1']}
           items={items1}
           style={{
             flex: 1,
@@ -90,7 +98,7 @@ const App = () => {
             mode="inline"
             onClick={(e) => setSelectedComponentKey(e.key)}
             defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
+            defaultOpenKeys={items2.map((item) => item.key)}
             style={{
               height: '100%',
               borderRight: 0,
@@ -106,7 +114,7 @@ const App = () => {
           <Breadcrumb
             items={[
               {
-                title: 'Deep Cider',
+                title: 'deepCider',
               },
               {
                 title: 'List',
@@ -123,7 +131,7 @@ const App = () => {
             style={{
               padding: 24,
               margin: 0,
-              minHeight: 280,
+              minHeight: '100vh',
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}

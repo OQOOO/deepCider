@@ -1,6 +1,6 @@
 package com.deepcider.coreserver.controllers;
 
-import com.deepcider.coreserver.services.OCRApiClientService;
+import com.deepcider.coreserver.services.ImageApiClientService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,16 +12,29 @@ import reactor.core.publisher.Mono;
 @CrossOrigin(origins = "*")
 public class ImageController {
 
-    private final OCRApiClientService ocrApiClientService;
+    private final ImageApiClientService imageApiClientService;
 
-    public ImageController(OCRApiClientService ocrApiClientService) {
-        this.ocrApiClientService = ocrApiClientService;
+    public ImageController(ImageApiClientService imageApiClientService) {
+        this.imageApiClientService = imageApiClientService;
     }
 
     @PostMapping(value = "/ocr")
     public Mono<String> OCR(@RequestParam("file") MultipartFile file) {
-        return this.ocrApiClientService.postToOCRServer(file);
+        // ocrEndpoint
+        String port = "5200";
+        String path = "/ocr";
 
+        return this.imageApiClientService.postToOCRServer(file, port, path);
+
+    }
+
+    @PostMapping(value = "/objectDetection")
+    public Mono<String> objectDetection(@RequestParam("file") MultipartFile file) {
+        // ODEndpoint
+        String port = "5202";
+        String path = "/yolo";
+
+        return this.imageApiClientService.postToOCRServer(file, port, path);
     }
 
 }
