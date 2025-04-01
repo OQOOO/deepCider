@@ -33,7 +33,6 @@ const items2 = [
     label: '소개', // 첫 번째 서브 메뉴 이름
     children: [
       { key: 'dashboard', label: 'dashboard' }, // 첫 번째 서브 메뉴의 첫 번째 항목
-      { key: '1-2', label: '2' }
     ]
   },
   {

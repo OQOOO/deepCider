@@ -31,6 +31,7 @@ async def ocr_endpoint(file: UploadFile = File(...)):
     file_content = await file.read()
     image = io.BytesIO(file_content)
     pil_image = Image.open(image)
+    pil_image = pil_image.convert('RGB')
     image_np = np.array(pil_image)
 
     # Object Detection 처리
