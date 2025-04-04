@@ -9,12 +9,13 @@ export async function chatClient(user_message, api, onMessageUpdate) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: user_message }),
         });
-
         if (!response.ok) throw new Error("Network response was not ok");
 
         // 스트림 데이터 읽기
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
+
+
         let result = "";
 
         while (true) {
@@ -23,6 +24,7 @@ export async function chatClient(user_message, api, onMessageUpdate) {
 
             // 데이터 해독 및 업데이트
             let chunk = decoder.decode(value, { stream: true });
+            console.log(chunk)
 
             
 
@@ -46,7 +48,7 @@ export async function chatClient(user_message, api, onMessageUpdate) {
             //console.log(chunk)
 
             if (chunk.startsWith("data:")) { // data: 태그에 달려온 경우
-                chunk = chunk.substring(5)
+                chunk = chunk.substring(6) // 스프링 서버 사용시 5로 변경해야 정상작동
                 if (chunk == "") {
                     chunk = " ";
                 }
@@ -70,30 +72,3 @@ export async function chatClient(user_message, api, onMessageUpdate) {
         return null;
     }
 }
-
-// export async function chatClient(user_message) {
-//     let backEndPort = "37777";
-
-//     try {
-//         // POST 요청 보내기
-//         const response = await fetch(`http://localhost:${backEndPort}/validateLogic`, {
-//             method: "POST", // 요청 방법을 POST로 설정
-//             headers: {
-//                 "Content-Type": "application/json", // JSON 형식의 데이터 전송
-//             },
-
-//             // ASP.NET = Message, Spring = message
-//             body: JSON.stringify({ message: user_message }), // { Message: messageContent } 형식으로 전송
-//         });
-
-//         if (!response.ok) throw new Error("Network response was not ok");
-
-//         const data = await response.json(); // JSON 형식으로 변환
-//         console.log(data);
-//         return data; // 받은 데이터를 그대로 반환
-
-//     } catch (error) {
-//         console.error("Error:", error);
-//         return null; // 에러 발생 시 null 반환
-//     }
-// }

@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text.Json;
 using System.Text;
+using System.Threading;
 
 namespace OO_CoreServer.Services
 {
@@ -12,23 +13,35 @@ namespace OO_CoreServer.Services
             _httpClient = httpClient;
         }
 
-        public async Task<string> PostToLLMServer(string request)
+        public async IAsyncEnumerable<string> PostToLLMServerStreamAsync(string request, CancellationToken cancellationToken = default)
         {
             string prompt = $"""
-                header
-                =====
-                {request}
-                =====
-                tail
+                User: {request}
+                Assistant :
                 """;
 
             var payload = new { prompt = prompt };
             var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("http://host.docker.internal:5000/generate", content);
-            var result = await response.Content.ReadAsStringAsync();
+            using var response = await _httpClient.SendAsync(
+                new HttpRequestMessage(HttpMethod.Post, "http://host.docker.internal:5000/generate")
+                {
+                    Content = content
+                },
+                HttpCompletionOption.ResponseHeadersRead // 헤더 수신 후 바로 반환 (스트리밍 가능)
+            );
 
-            return result;
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var reader = new StreamReader(stream);
+
+            while (!reader.EndOfStream)
+            {
+                string? line = await reader.ReadLineAsync();
+                if (!string.IsNullOrEmpty(line))
+                {        
+                    yield return line; // 한 줄씩 반환 (스트리밍)
+                }
+            }
         }
     }
 }

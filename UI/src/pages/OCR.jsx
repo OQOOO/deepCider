@@ -9,26 +9,14 @@ import { styled } from '@mui/material/styles';
 import CanvasComponent from '../components/CanvasComponent';
 import ResponseBox from '../components/ResponseBox';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import ImageDropZone from '../components/ImageDropZone';
+import { ImageClient } from '../client/ImageClient';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: theme.shape.borderRadius * 2,
   backgroundColor: '#f8f9fa',
   border: '1px solid #e9ecef',
-}));
-
-const DropZone = styled(Box)(({ theme, isDragActive }) => ({
-  border: `2px dashed ${isDragActive ? '#1a237e' : '#e9ecef'}`,
-  borderRadius: theme.shape.borderRadius * 2,
-  padding: theme.spacing(4),
-  textAlign: 'center',
-  backgroundColor: isDragActive ? 'rgba(26, 35, 126, 0.05)' : '#ffffff',
-  transition: 'all 0.2s ease',
-  cursor: 'pointer',
-  '&:hover': {
-    borderColor: '#1a237e',
-    backgroundColor: 'rgba(26, 35, 126, 0.05)',
-  },
 }));
 
 const OCR = () => {
@@ -65,36 +53,25 @@ const OCR = () => {
 
     // 서버에 전송 및 결과 받아오기
     const handleUpload = async () => { 
+        
+        let imageFile = file;
+
+        // 파일 없으면, 이미지 src 없으면 종료
         if (!file && !imageSrc) {
             console.log("파일 업데이트 안됨");
             return;
         }
         setUploadCount(uploadCount + 1);
 
-        console.log("uploadCount", uploadCount);
-
-        const formData = new FormData();
-        if (file) {
-            formData.append("file", file);
-        } else if (imageSrc) {
-            // base64 이미지를 Blob으로 변환
+        // 파일 없으면 이미지 src를 Blob으로 변환
+        if (!file) {
             const response = await fetch(imageSrc);
             const blob = await response.blob();
-            formData.append("file", blob, "cropped_image.png");
+            imageFile = blob;
         }
 
-        try {
-            const response = await fetch("http://localhost:37777/ocr", {
-                method: "POST",
-                body: formData
-            });
-            const data = await response.json();  // Promise 해제 후 저장
-            setOCRResponse(data);
-            setOCRData(data.ocr_result);
-            //setOCRText(JSON.stringify(data, null, 2));
-        } catch (error) {
-            console.error("Error:", error);
-        }
+        const data = await ImageClient("ocr", imageFile);
+        setOCRResponse(data);
     } 
 
     /**
@@ -200,8 +177,8 @@ const OCR = () => {
     return (
         <Container maxWidth="md">
             <Box sx={{ py: 3 }}>
-                <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: '#1a237e' }}>
-                    이미지에서 글자 추출
+                <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: '#001529' }}>
+                    글자 추출
                 </Typography>
                 <Typography variant="subtitle1" color="text.secondary" paragraph>
                     이미지 속 글자를 복사 가능한 텍스트로 추출합니다.
@@ -213,9 +190,9 @@ const OCR = () => {
                             variant="contained" 
                             onClick={triggerFileInput}
                             sx={{
-                                backgroundColor: '#1a237e',
+                                backgroundColor: '#001529',
                                 '&:hover': {
-                                    backgroundColor: '#000051',
+                                    backgroundColor: '#002140',
                                 },
                             }}
                         >
@@ -227,9 +204,9 @@ const OCR = () => {
                             variant="contained" 
                             onClick={handleUpload}
                             sx={{
-                                backgroundColor: '#1a237e',
+                                backgroundColor: '#001529',
                                 '&:hover': {
-                                    backgroundColor: '#000051',
+                                    backgroundColor: '#002140',
                                 },
                             }}
                         >
@@ -242,11 +219,11 @@ const OCR = () => {
                                 startIcon={<RestartAltIcon />}
                                 onClick={handleReset}
                                 sx={{
-                                    borderColor: '#1a237e',
-                                    color: '#1a237e',
+                                    borderColor: '#001529',
+                                    color: '#001529',
                                     '&:hover': {
-                                        borderColor: '#000051',
-                                        backgroundColor: 'rgba(26, 35, 126, 0.04)',
+                                        borderColor: '#002140',
+                                        backgroundColor: 'rgba(0, 21, 41, 0.04)',
                                     },
                                 }}
                             >
@@ -291,21 +268,14 @@ const OCR = () => {
                             />
                         </Box>
                     ) : (
-                        <DropZone
+                        <ImageDropZone
                             isDragActive={isDragActive}
                             onDragEnter={handleDragEnter}
                             onDragLeave={handleDragLeave}
                             onDragOver={handleDragOver}
                             onDrop={handleDrop}
                             onClick={triggerFileInput}
-                        >
-                            <Typography variant="h6" sx={{ color: '#1a237e', mb: 1 }}>
-                                이미지를 드래그하여 업로드
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                또는 클릭하여 파일 선택
-                            </Typography>
-                        </DropZone>
+                        />
                     )}
                 </StyledPaper>
             </Box>

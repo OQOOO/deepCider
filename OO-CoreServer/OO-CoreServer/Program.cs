@@ -23,6 +23,7 @@ builder.Services.AddHttpClient();
 
 // custom services
 builder.Services.AddTransient<LLMApiClientService>();
+builder.Services.AddTransient<ImageApiClientService>();
 
 var app = builder.Build();
 

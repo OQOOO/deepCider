@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import Box from '@mui/material/Box';
-import { LaptopOutlined, UserOutlined, FontColorsOutlined, GatewayOutlined  
+import { UserOutlined, CalculatorOutlined, GatewayOutlined, BulbOutlined, NodeIndexOutlined  
 } from '@ant-design/icons';
 
 import ValidateLogic from './pages/ValidateLogic.jsx'
 import Dashboard from './pages/Dashboard.jsx';
 import OCR from './pages/OCR.jsx';
 import ObjectDetection from './pages/ObjectDetection.jsx';
-
+import DateCalculator from './pages/DateCalculator.jsx';
 import logo from './assets/react.svg'
 
 const componentsMap = {
@@ -16,6 +16,7 @@ const componentsMap = {
   "validateLogic": <ValidateLogic/>,
   "OCR": <OCR></OCR>,
   "objectDetection": <ObjectDetection></ObjectDetection>,
+  "dateCalculator": <DateCalculator></DateCalculator>,
 }
 
 
@@ -37,19 +38,21 @@ const items2 = [
   },
   {
     key: 'sub2', // 두 번째 항목의 key
-    icon: React.createElement(FontColorsOutlined ),
-    label: '언어모델',
+    icon: React.createElement(BulbOutlined ),
+    label: 'AI 도구',
     children: [
+      { key: 'OCR', label: '글자 추출' },
+      { key: 'objectDetection', label: '물체 탐지' },
       { key: 'validateLogic', label: '논리적 오류 찾기' },
     ]
   },
   {
     key: 'sub3',
-    icon: React.createElement(GatewayOutlined ),
-    label: '이미지 모델',
+    icon: React.createElement(CalculatorOutlined ),
+    label: '일반 도구',
     children: [
-      { key: 'OCR', label: '글자 추출' },
-      { key: 'objectDetection', label: '물체 탐지' }
+      { key: 'dateCalculator', label: '날짜 계산기' },
+      { key: 'tempEmail', label: '임시 이메일' },
     ]
   }
 ];

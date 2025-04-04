@@ -7,7 +7,7 @@ public class PromptWrapper {
 
     public String validateLogic(String message) {
         String prompt = String.format("""
-            User: Find the Fallacy in the following sentences. %s
+            User: %s
             Assistant:
             """, message);
 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\development\\Project OceanOracle\\OO-CoreServer\\OO-CoreServer\\OO-CoreServer.csproj": {}
+    "C:\\development\\Project DeepCider\\OO-CoreServer\\OO-CoreServer\\OO-CoreServer.csproj": {}
   },
   "projects": {
-    "C:\\development\\Project OceanOracle\\OO-CoreServer\\OO-CoreServer\\OO-CoreServer.csproj": {
+    "C:\\development\\Project DeepCider\\OO-CoreServer\\OO-CoreServer\\OO-CoreServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\development\\Project OceanOracle\\OO-CoreServer\\OO-CoreServer\\OO-CoreServer.csproj",
+        "projectUniqueName": "C:\\development\\Project DeepCider\\OO-CoreServer\\OO-CoreServer\\OO-CoreServer.csproj",
         "projectName": "OO-CoreServer",
-        "projectPath": "C:\\development\\Project OceanOracle\\OO-CoreServer\\OO-CoreServer\\OO-CoreServer.csproj",
+        "projectPath": "C:\\development\\Project DeepCider\\OO-CoreServer\\OO-CoreServer\\OO-CoreServer.csproj",
         "packagesPath": "C:\\Users\\igh07\\.nuget\\packages\\",
-        "outputPath": "C:\\development\\Project OceanOracle\\OO-CoreServer\\OO-CoreServer\\obj\\",
+        "outputPath": "C:\\development\\Project DeepCider\\OO-CoreServer\\OO-CoreServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
