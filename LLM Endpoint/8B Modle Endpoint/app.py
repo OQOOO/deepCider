@@ -26,14 +26,13 @@ async def generate_stream(prompt: str):
 
     generated_text = outputs[0]["generated_text"]
 
-
     # 한 글자씩 스트리밍 전송
     for char in generated_text:
         yield f"data: {char}\n\n"  # data: 접두사를 추가
         await asyncio.sleep(0.05)  # 클라이언트에서 자연스럽게 출력되도록 딜레이 추가
 
 # 스트리밍 API 엔드포인트
-@app.post("/generate")
+@app.post("/predict")
 async def generate(request: PromptRequest):
     return StreamingResponse(generate_stream(request.prompt), media_type="text/event-stream")
 

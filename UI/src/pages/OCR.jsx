@@ -70,7 +70,7 @@ const OCR = () => {
             imageFile = blob;
         }
 
-        const data = await ImageClient("ocr", imageFile);
+        const data = await ImageClient("OCR", imageFile);
         setOCRResponse(data);
     } 
 

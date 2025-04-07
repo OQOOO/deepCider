@@ -11,7 +11,7 @@ namespace OO_CoreServer.Services
             _httpClient = httpClient;
         }
 
-        public async Task<string> PostToImageModelServer(IFormFile file, string port, string path)
+        public async Task<string> PostToImageModelServer(IFormFile file, string port, string path="/predict")
         {
             string url = $"http://host.docker.internal:{port}{path}";
 

@@ -22,7 +22,7 @@ model = YOLO("yolov8m.pt")
 
 app = FastAPI()
 
-@app.post("/yolo")
+@app.post("/predict")
 async def ocr_endpoint(file: UploadFile = File(...)):
     if not file:
         return JSONResponse(content={"success": False, "message": "파일이 업로드되지 않았습니다."}, status_code=400)

@@ -32,7 +32,7 @@ async def generate_stream(prompt: str):
         await asyncio.sleep(0.05)  # 클라이언트에서 자연스럽게 출력되도록 딜레이 추가
 
 # 스트리밍 API 엔드포인트
-@app.post("/generate")
+@app.post("/predict")
 async def generate(request: PromptRequest):
     return StreamingResponse(generate_stream(request.prompt), media_type="text/event-stream")
 

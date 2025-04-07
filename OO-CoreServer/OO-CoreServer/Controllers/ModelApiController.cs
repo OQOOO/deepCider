@@ -42,13 +42,12 @@ namespace OO_CoreServer.Controllers
             }
         }
 
-        [HttpPost("/ocr")]
+        [HttpPost("/OCR")]
         public async Task<IActionResult> OCR([FromForm] IFormFile file)
         {
             string port = "5200";
-            string path = "/ocr";
 
-            var result = await _imageApiClientService.PostToImageModelServer(file, port, path);
+            var result = await _imageApiClientService.PostToImageModelServer(file, port);
             return Ok(result);
         }
 
@@ -56,10 +55,11 @@ namespace OO_CoreServer.Controllers
         public async Task<IActionResult> ObjectDetection([FromForm] IFormFile file)
         {
             string port = "5202";
-            string path = "/yolo";
 
-            var result = await _imageApiClientService.PostToImageModelServer(file, port, path);
+            var result = await _imageApiClientService.PostToImageModelServer(file, port);
             return Ok(result);
         }
+
+        // GPT api 사용할땐 'ThirdPartyApiController' 새로 작성. api 키는 로컬에(gitHub 안올라가는 위치) 따로 보관하고 경로 읽어서 사용하기
     }
 }

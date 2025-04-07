@@ -17,12 +17,10 @@ RUN pip install --no-cache-dir \
     asyncio
 
 # 모델 다운로드 및 캐싱
-#RUN python -c "from transformers import pipeline; pipeline('text-generation', model='distilgpt2')"
 RUN python -c "from transformers import pipeline; pipeline('text-generation', model='deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B')"
-#RUN python -c "from transformers import pipeline; pipeline('text-generation', model='UNIVA-Bllossom/DeepSeek-llama3.1-Bllossom-8B')"
 
 # 애플리케이션 코드 복사
-COPY app.py /app/app.py
+COPY . /app
 
 # 컨테이너 실행 시 FastAPI 서버 실행
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]

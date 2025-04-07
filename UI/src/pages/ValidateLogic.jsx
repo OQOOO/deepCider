@@ -17,7 +17,8 @@ function ValidateLogic() {
     // 입력 화면의 값을 받아 서버로 전송 -> 반환값 화면에 표시
     const sendMessage = (bottonNum) => {
         const apiMap = { // api 연결에 사용할 path
-            1:"validateLogic",
+            //1:"validateLogic",
+            1:"tApi/chat",
             2:"2"
         };
 

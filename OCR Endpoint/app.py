@@ -10,7 +10,7 @@ app = FastAPI()
 # PaddleOCR 인스턴스 생성 (한국어 설정)
 ocr = PaddleOCR(use_angle_cls=False, lang='korean')  # 또는 lang='ko'
 
-@app.post("/ocr")
+@app.post("/predict")
 async def ocr_endpoint(file: UploadFile = File(...)):
     if not file:
         return JSONResponse(content={"success": False, "message": "파일이 업로드되지 않았습니다."}, status_code=400)

@@ -1,4 +1,3 @@
-#FROM registry.baidubce.com/paddlepaddle/paddle:2.6.1-gpu-cuda12.0-cudnn8.9-trt8.6
 FROM registry.baidubce.com/paddlepaddle/paddle:3.0.0b1-gpu-cuda12.3-cudnn9.0-trt8.6
 
 # 작업 디렉토리 설정
@@ -14,5 +13,4 @@ RUN pip install --no-cache-dir paddleocr \
 COPY . /app
 
 # 실행 명령어 지정
-# CMD ["python", "app.py"]
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5200"]

@@ -24,7 +24,7 @@ export async function chatClient(user_message, api, onMessageUpdate) {
 
             // 데이터 해독 및 업데이트
             let chunk = decoder.decode(value, { stream: true });
-            console.log(chunk)
+            //console.log(chunk)
 
             
 
@@ -44,23 +44,40 @@ export async function chatClient(user_message, api, onMessageUpdate) {
              * 
              * (빈칸)  -> 무시
              */
-            chunk = chunk.trim();
-            //console.log(chunk)
+            // chunk = chunk.trim();
+            // //console.log(chunk)
 
-            if (chunk.startsWith("data:")) { // data: 태그에 달려온 경우
-                chunk = chunk.substring(6) // 스프링 서버 사용시 5로 변경해야 정상작동
-                if (chunk == "") {
-                    chunk = " ";
-                }
-            }
-            else { // data: 태그에 달려오지 않은경우 (한칸 밀림)
-                if (chunk != "") {
-                    result = result.slice(0, -1);
-                }
-            }
+            
+            // if (chunk.startsWith("data:")) { // data: 태그에 달려온 경우
+            //     chunk = chunk.substring(6) // 스프링 서버 사용시 5로 변경해야 정상작동
+            //     if (chunk == "") {
+            //         chunk = " ";
+            //     }
+            // }
+            // else { // data: 태그에 달려오지 않은경우 (한칸 밀림)
+            //     if (chunk != "") {
+            //         result = result.slice(0, -1);
+            //     }
+            // }
 
-            result += chunk;
-            /**청크 관련 로직 끝 */
+            // result += chunk;
+            /**청크 관련 로직 끝 (클라이언트에서 받음음)*/
+
+            // 여러 줄이 한꺼번에 올 수 있으므로 \n 기준으로 분해
+
+            //gpt에서 받음
+            console.log(chunk);
+            chunk.split('\n').forEach(line => {
+                //line = line.trim();
+                if (line.startsWith("data: ")) {
+                    const content = line.substring(6).trimEnd();
+
+                    if (content === "[DONE]") return;
+
+                    result += content;
+                    onMessageUpdate(result);
+                }
+            });
 
             onMessageUpdate(result); // 실시간으로 UI 업데이트
         }
