@@ -38,7 +38,7 @@ namespace OO_CoreServer.Controllers
             await foreach (var chunk in _clientService.PostToLLMServerStreamAsync(dto.Message))
             {
                 await Response.WriteAsync(chunk);
-                await Response.Body.FlushAsync(); // 💡 강제로 데이터를 클라이언트로 밀어냄
+                await Response.Body.FlushAsync(); // 강제로 데이터를 클라이언트로 밀어냄
             }
         }
 

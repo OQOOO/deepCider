@@ -18,7 +18,7 @@ function ValidateLogic() {
     const sendMessage = (bottonNum) => {
         const apiMap = { // api 연결에 사용할 path
             //1:"validateLogic",
-            1:"tApi/chat",
+            1:"tApi/openAI",
             2:"2"
         };
 
