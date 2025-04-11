@@ -22,10 +22,18 @@ const componentsMap = {
 
 
 const { Header, Content, Sider } = Layout;
-const items1 = ['1', '2', '3'].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
+const items1 = [
+  {
+    key: '1', // 첫 번째 항목의 key
+    icon: React.createElement(GatewayOutlined),
+    label: 'Tools', // 첫 번째 서브 메뉴 이름
+  },
+  {
+    key: '2', // 두 번째 항목의 key
+    icon: React.createElement(NodeIndexOutlined),
+    label: '로그인',
+  }
+];
 
 const items2 = [
   {
@@ -41,9 +49,9 @@ const items2 = [
     icon: React.createElement(BulbOutlined ),
     label: 'AI 도구',
     children: [
+      { key: 'validateLogic', label: '논리적 오류 찾기' },
       { key: 'OCR', label: '글자 추출' },
       { key: 'objectDetection', label: '물체 탐지' },
-      { key: 'validateLogic', label: '논리적 오류 찾기' },
     ]
   },
   {
@@ -110,23 +118,25 @@ const App = () => {
         </Sider>
         <Layout
           style={{
-            padding: '0 24px 24px',
+            padding: '0 2px 0px',
+            backgroundColor: '#919191',
+            
           }}
         >
           <Breadcrumb
-            items={[
-              {
-                title: 'deepCider',
-              },
-              {
-                title: 'List',
-              },
-              {
-                title: selectedComponentKey,
-              },
-            ]}
+            // items={[
+            //   {
+            //     title: 'deepCider',
+            //   },
+            //   {
+            //     title: 'List',
+            //   },
+            //   {
+            //     title: selectedComponentKey,
+            //   },
+            // ]}
             style={{
-              margin: '16px 0',
+              margin: '0px 0',
             }}
           />
           <Content
@@ -135,7 +145,6 @@ const App = () => {
               margin: 0,
               minHeight: '100vh',
               background: colorBgContainer,
-              borderRadius: borderRadiusLG,
             }}
           >
             {
