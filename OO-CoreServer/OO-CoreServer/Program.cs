@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using OO_CoreServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,13 @@ builder.Services.AddHttpClient();
 builder.Services.AddTransient<LLMApiClientService>();
 builder.Services.AddTransient<ImageApiClientService>();
 builder.Services.AddTransient<OpenApiClient>();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    )
+);
 
 var app = builder.Build();
 

@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text;
 using System.Net.Http;
 using OO_CoreServer.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace OO_CoreServer.Controllers
 {
@@ -15,11 +16,13 @@ namespace OO_CoreServer.Controllers
     [ApiController]
     public class ThirdPartyApiController : ControllerBase
     {
+        private readonly AppDbContext _context;
         private OpenApiClient _openApiClient;
 
-        public ThirdPartyApiController(OpenApiClient openApiClient)
+        public ThirdPartyApiController(OpenApiClient openApiClient, AppDbContext context)
         {
             _openApiClient = openApiClient;
+            _context = context;
         }
 
         [HttpGet("/test")]
@@ -41,6 +44,26 @@ namespace OO_CoreServer.Controllers
             }
         }
 
-        //
+        // Test
+
+        [HttpPost("DBTestInput")]
+        public ActionResult<User> CreateUser([FromBody] User user)
+        {
+            if (user == null)
+            {
+                return BadRequest("Invalid user data.");
+            }
+
+            _context.Users.Add(user); // 새로운 사용자 추가
+            _context.SaveChanges(); // 변경 사항 저장
+
+            return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user); // 새로 생성된 리소스를 반환
+        }
+        [HttpGet("DBTestOutput")]
+        public ActionResult<IEnumerable<User>> GetUsers()
+        {
+            var users = _context.Users.ToList(); // Users 테이블에서 모든 데이터 가져오기
+            return Ok(users); // 데이터를 HTTP 200 OK 상태와 함께 반환
+        }
     }
 }
