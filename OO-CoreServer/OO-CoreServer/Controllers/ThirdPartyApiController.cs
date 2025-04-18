@@ -9,6 +9,8 @@ using System.Text;
 using System.Net.Http;
 using OO_CoreServer.Services;
 using Microsoft.EntityFrameworkCore;
+using OO_CoreServer.DataAccess;
+using OO_CoreServer.DataAccess.Entities;
 
 namespace OO_CoreServer.Controllers
 {

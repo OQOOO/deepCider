@@ -40,17 +40,20 @@ namespace OO_CoreServer.Services
                     입력된 문장의 오류에 대한 설명...
                 </div>
 
-                <h3>반박(온건적)</h3>
+                <h3>반박</h3>
                 <div style="margin: 10px">
                     상황에 맞는 반박문 작성...
                 </div>
+                """;
 
-                <h3>반박(공격적)</h3>
+            /*
+               <h3>반박(공격적)</h3>
                 <div style="margin: 10px">
                     상황에 맞는 시원한 반박문 작성, 과장, 비유, 비꼬기를 사용할 수 있음, 상대방을 공격하진 말것...
                 </div>
+                // ... 너무 공격적임, 논리적으로 잘 맞지도 않음
                 
-                """;
+             */
 
             // 전달할 데이터 형식 정의
             var requestBody = new
@@ -115,5 +118,5 @@ namespace OO_CoreServer.Services
 gpt-4.5-preview	$75.00	-	최신 프리뷰 모델
 gpt-4o 	        $30.00	$60.00	고성능 모델
 gpt-4o-mini	    $15.00	$60.00	비용 효율적인 소형 모델
-gpt-3.5-turbo	$1.50	$2.00	경제적인 모델
+gpt-3.5-turbo	$1.50	$2.00   경제적인 모델
 */

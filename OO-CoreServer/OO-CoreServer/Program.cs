@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using OO_CoreServer.DataAccess;
+using OO_CoreServer.DataAccess.Seeding;
 using OO_CoreServer.Services;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +38,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    DbInitializer.Seed(dbContext);
+
+    // migration commend line:
+    // dotnet ef migrations add example
+}
 
 app.UseCors("AllowAll");
 

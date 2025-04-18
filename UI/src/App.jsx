@@ -10,6 +10,8 @@ import OCR from './pages/OCR.jsx';
 import ObjectDetection from './pages/ObjectDetection.jsx';
 import DateCalculator from './pages/DateCalculator.jsx';
 import logo from './assets/react.svg'
+import { Login } from '@mui/icons-material';
+import LoginPage from './pages/LoginPage.jsx';
 
 const componentsMap = {
   "dashboard": <Dashboard></Dashboard>,
@@ -17,6 +19,7 @@ const componentsMap = {
   "OCR": <OCR></OCR>,
   "objectDetection": <ObjectDetection></ObjectDetection>,
   "dateCalculator": <DateCalculator></DateCalculator>,
+  "loginPage": <LoginPage></LoginPage>
 }
 
 
@@ -35,7 +38,7 @@ const items1 = [
   }
 ];
 
-const items2 = [
+const pageMenuItems = [
   {
     key: 'sub1', // 첫 번째 항목의 key
     icon: React.createElement(UserOutlined),
@@ -62,6 +65,11 @@ const items2 = [
       { key: 'dateCalculator', label: '날짜 계산기' },
       { key: 'tempEmail', label: '임시 이메일' },
     ]
+  },
+  {
+    key: 'loginPage', // 두 번째 항목의 key
+    icon: React.createElement(NodeIndexOutlined),
+    label: '로그인',
   }
 ];
 
@@ -78,27 +86,40 @@ const App = () => {
         style={{
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'space-between', // 좌우 정렬
         }}
       >
         <div className="demo-logo">
-          {/* <img src={logo} alt="logo"></img> */}
-          <Box sx={{color:'white', width: 170}}>
+          <Box sx={{ color: 'white', width: 170 }}>
             <h2>deepCider</h2>
           </Box>
         </div>
+        {/* 일반 메뉴 */}
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['1']}
-          items={items1}
+          onClick={(e) => setSelectedComponentKey(e.key)}
+          items={pageMenuItems.filter(item => item.key !== 'loginPage')} // '로그인' 메뉴 제외
+          selectedKeys={[selectedComponentKey]} // 선택된 메뉴 동기화
           style={{
             flex: 1,
             minWidth: 0,
           }}
         />
+        {/* 로그인 메뉴 */}
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          onClick={(e) => setSelectedComponentKey(e.key)}
+          items={pageMenuItems.filter(item => item.key === 'loginPage')} // '로그인' 메뉴만 포함
+          selectedKeys={[selectedComponentKey]} // 선택된 메뉴 동기화
+          style={{
+            flex: 0,
+          }}
+        />
       </Header>
       <Layout>
-        <Sider
+        {/* <Sider
           width={200}
           style={{
             background: colorBgContainer,
@@ -108,14 +129,14 @@ const App = () => {
             mode="inline"
             onClick={(e) => setSelectedComponentKey(e.key)}
             defaultSelectedKeys={['1']}
-            defaultOpenKeys={items2.map((item) => item.key)}
+            defaultOpenKeys={pageMenuItems.map((item) => item.key)}
             style={{
               height: '100%',
               borderRight: 0,
             }}
-            items={items2}
+            items={pageMenuItems}
           />
-        </Sider>
+        </Sider> */}
         <Layout
           style={{
             padding: '0 2px 0px',
