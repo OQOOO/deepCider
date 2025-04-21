@@ -39,7 +39,7 @@ namespace OO_CoreServer.Controllers
             string message = dto.Message;
             Response.ContentType = "text/event-stream";
 
-            await foreach (var chunk in _openApiClient.PostToOpenAIServerAsync(dto.Message))
+            await foreach (var chunk in _openApiClient.SendPromptAndStreamResponse(dto.Message))
             {
                 await Response.WriteAsync(chunk);
                 await Response.Body.FlushAsync(); // 강제로 데이터를 클라이언트로 밀어냄

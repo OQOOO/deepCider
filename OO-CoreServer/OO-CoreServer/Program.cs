@@ -26,7 +26,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 // custom services
-builder.Services.AddTransient<LLMApiClientService>();
+builder.Services.AddTransient<LocalLLMApiClient>();
 builder.Services.AddTransient<ImageApiClientService>();
 builder.Services.AddTransient<OpenApiClient>();
 

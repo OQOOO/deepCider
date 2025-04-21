@@ -14,14 +14,20 @@ namespace OO_CoreServer.Controllers
     [ApiController]
     public class ModelApiController : ControllerBase
     {
-        private LLMApiClientService _clientService;
         private ImageApiClientService _imageApiClientService;
 
-        public ModelApiController(LLMApiClientService clientService,
-                                  ImageApiClientService imageApiClientService)
+        private OpenApiClient _openApiClient;
+        private LocalLLMApiClient _localLLMApiClient;
+        
+
+        public ModelApiController(ImageApiClientService imageApiClientService,
+                                  OpenApiClient openApiClient,
+                                  LocalLLMApiClient localLLMApiClient)
         {
-            _clientService = clientService;
             _imageApiClientService = imageApiClientService;
+
+            _openApiClient = openApiClient;
+            _localLLMApiClient = localLLMApiClient;
         }
 
         // GET: api/Main
@@ -34,8 +40,17 @@ namespace OO_CoreServer.Controllers
         [HttpPost("/validateLogic")]
         public async Task ValidateLogic([FromBody] MessageDTO dto)
         {
+            var clientMap = new Dictionary<string, ILLMApiClient>()
+            {
+                {"openAI", _openApiClient },
+                {"deepseek", _localLLMApiClient }
+            };
+            string selectedAPI = "openAI";
+
+            ILLMApiClient llmApiClient = clientMap["openAI"];
+
             Response.Headers.Append("Content-Type", "text/event-stream"); // SSE와 동일한 Content-Type 설정
-            await foreach (var chunk in _clientService.PostToLLMServerStreamAsync(dto.Message))
+            await foreach (var chunk in llmApiClient.SendPromptAndStreamResponse(dto.Message))
             {
                 await Response.WriteAsync(chunk);
                 await Response.Body.FlushAsync(); // 강제로 데이터를 클라이언트로 밀어냄

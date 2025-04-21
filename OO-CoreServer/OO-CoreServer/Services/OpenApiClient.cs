@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.DataProtection.KeyManagement;
 
 namespace OO_CoreServer.Services
 {
-    public class OpenApiClient
+    public class OpenApiClient : ILLMApiClient
     {
         private readonly HttpClient _httpClient;
         private string _apiKey;
@@ -18,13 +18,13 @@ namespace OO_CoreServer.Services
             _apiKey = System.IO.File.ReadAllText(keyPath).Trim();
         }
 
-        public async IAsyncEnumerable<string> PostToOpenAIServerAsync(string input)
+        public async IAsyncEnumerable<string> SendPromptAndStreamResponse(string input)
         {
             string prompt = $"""
                 너는 논리학 전문가야. 입력 문장에서 논리적 오류가 있는지 분석해줘.
 
                 출력은 반드시 아래 형식을 따라줘. 형식에 맞지 않는 추가 텍스트는 포함하지 마.
-                논리적 오류가 없으면 '논리적 오류가 없습니다' 만 출력해.
+                논리적 오류가 없으면 '논리적 오류를 찾을 수 없습니다.' 만 출력해.
                 
                 입력 문장: {input}
 

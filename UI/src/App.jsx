@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import Box from '@mui/material/Box';
 import { UserOutlined, CalculatorOutlined, GatewayOutlined, BulbOutlined, NodeIndexOutlined  
@@ -12,74 +13,62 @@ import DateCalculator from './pages/DateCalculator.jsx';
 import logo from './assets/react.svg'
 import { Login } from '@mui/icons-material';
 import LoginPage from './pages/LoginPage.jsx';
-
-const componentsMap = {
-  "dashboard": <Dashboard></Dashboard>,
-  "validateLogic": <ValidateLogic/>,
-  "OCR": <OCR></OCR>,
-  "objectDetection": <ObjectDetection></ObjectDetection>,
-  "dateCalculator": <DateCalculator></DateCalculator>,
-  "loginPage": <LoginPage></LoginPage>
-}
+import AdminPage from './pages/AdminPagd.jsx';
 
 
-
-const { Header, Content, Sider } = Layout;
-const items1 = [
-  {
-    key: '1', // 첫 번째 항목의 key
-    icon: React.createElement(GatewayOutlined),
-    label: 'Tools', // 첫 번째 서브 메뉴 이름
-  },
-  {
-    key: '2', // 두 번째 항목의 key
-    icon: React.createElement(NodeIndexOutlined),
-    label: '로그인',
+function Home() {
+  const componentsMap = {
+    "dashboard": <Dashboard></Dashboard>,
+    "validateLogic": <ValidateLogic/>,
+    "OCR": <OCR></OCR>,
+    "objectDetection": <ObjectDetection></ObjectDetection>,
+    "dateCalculator": <DateCalculator></DateCalculator>,
+    "loginPage": <LoginPage></LoginPage>
   }
-];
-
-const pageMenuItems = [
-  {
-    key: 'sub1', // 첫 번째 항목의 key
-    icon: React.createElement(UserOutlined),
-    label: '소개', // 첫 번째 서브 메뉴 이름
-    children: [
-      { key: 'dashboard', label: 'dashboard' }, // 첫 번째 서브 메뉴의 첫 번째 항목
-    ]
-  },
-  {
-    key: 'sub2', // 두 번째 항목의 key
-    icon: React.createElement(BulbOutlined ),
-    label: 'AI 도구',
-    children: [
-      { key: 'validateLogic', label: '논리적 오류 찾기' },
-      { key: 'OCR', label: '글자 추출' },
-      { key: 'objectDetection', label: '물체 탐지' },
-    ]
-  },
-  {
-    key: 'sub3',
-    icon: React.createElement(CalculatorOutlined ),
-    label: '일반 도구',
-    children: [
-      { key: 'dateCalculator', label: '날짜 계산기' },
-      { key: 'tempEmail', label: '임시 이메일' },
-    ]
-  },
-  {
-    key: 'loginPage', // 두 번째 항목의 key
-    icon: React.createElement(NodeIndexOutlined),
-    label: '로그인',
-  }
-];
-
-const App = () => {
+  
+  const { Header, Content, Sider } = Layout;
+  
+  const pageMenuItems = [
+    {
+      key: 'sub1', // 첫 번째 항목의 key
+      icon: React.createElement(UserOutlined),
+      label: '소개', // 첫 번째 서브 메뉴 이름
+      children: [
+        { key: 'dashboard', label: 'dashboard' }, // 첫 번째 서브 메뉴의 첫 번째 항목
+      ]
+    },
+    {
+      key: 'sub2', // 두 번째 항목의 key
+      icon: React.createElement(BulbOutlined ),
+      label: 'AI 도구',
+      children: [
+        { key: 'validateLogic', label: '논리적 오류 찾기' },
+        { key: 'OCR', label: '글자 추출' },
+        { key: 'objectDetection', label: '물체 탐지' },
+      ]
+    },
+    {
+      key: 'sub3',
+      icon: React.createElement(CalculatorOutlined ),
+      label: '일반 도구',
+      children: [
+        { key: 'dateCalculator', label: '날짜 계산기' },
+        { key: 'tempEmail', label: '임시 이메일' },
+      ]
+    },
+    {
+      key: 'loginPage', // 두 번째 항목의 key
+      icon: React.createElement(NodeIndexOutlined),
+      label: '로그인',
+    }
+  ];
 
   const [selectedComponentKey, setSelectedComponentKey] = useState("dashboard");
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
   return (
     <Layout>
       <Header
@@ -119,24 +108,6 @@ const App = () => {
         />
       </Header>
       <Layout>
-        {/* <Sider
-          width={200}
-          style={{
-            background: colorBgContainer,
-          }}
-        >
-          <Menu
-            mode="inline"
-            onClick={(e) => setSelectedComponentKey(e.key)}
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={pageMenuItems.map((item) => item.key)}
-            style={{
-              height: '100%',
-              borderRight: 0,
-            }}
-            items={pageMenuItems}
-          />
-        </Sider> */}
         <Layout
           style={{
             padding: '0 2px 0px',
@@ -145,17 +116,7 @@ const App = () => {
           }}
         >
           <Breadcrumb
-            // items={[
-            //   {
-            //     title: 'deepCider',
-            //   },
-            //   {
-            //     title: 'List',
-            //   },
-            //   {
-            //     title: selectedComponentKey,
-            //   },
-            // ]}
+
             style={{
               margin: '0px 0',
             }}
@@ -176,5 +137,25 @@ const App = () => {
       </Layout>
     </Layout>
   );
+}
+
+
+const App = () => {
+
+  return (
+    <div>
+      {/* <Home /> */}
+
+      {/* <nav>
+        <Link to="/">홈</Link>
+      </nav> */}
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/admin" element={<AdminPage />} />
+      </Routes>
+    </div>
+  );
+  
 };
 export default App;

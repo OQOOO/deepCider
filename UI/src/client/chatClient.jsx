@@ -61,9 +61,10 @@ export async function chatClient(user_message, api, onMessageUpdate) {
             // }
 
             // result += chunk;
-            /**청크 관련 로직 끝 (클라이언트에서 받음음)*/
+            /**청크 관련 로직 끝 (클라이언트에서 받음)*/
 
             // 여러 줄이 한꺼번에 올 수 있으므로 \n 기준으로 분해
+            // 이런 처리는 서버에서 해서 보내는게 더 좋을듯(적어도 일부는)
 
             //gpt에서 받음
             console.log(chunk);
