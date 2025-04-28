@@ -14,13 +14,13 @@ namespace OO_CoreServer.Controllers
     [ApiController]
     public class ModelApiController : ControllerBase
     {
-        private ImageApiClientService _imageApiClientService;
+        private ImageApiClient _imageApiClientService;
 
         private OpenApiClient _openApiClient;
         private LocalLLMApiClient _localLLMApiClient;
         
 
-        public ModelApiController(ImageApiClientService imageApiClientService,
+        public ModelApiController(ImageApiClient imageApiClientService,
                                   OpenApiClient openApiClient,
                                   LocalLLMApiClient localLLMApiClient)
         {

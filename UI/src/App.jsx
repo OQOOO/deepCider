@@ -14,16 +14,18 @@ import logo from './assets/react.svg'
 import { Login } from '@mui/icons-material';
 import LoginPage from './pages/LoginPage.jsx';
 import AdminPage from './pages/AdminPagd.jsx';
-
+import SignUpPage from './pages/SignUpPage.jsx';
 
 function Home() {
+  const [selectedComponentKey, setSelectedComponentKey] = useState("dashboard");
   const componentsMap = {
     "dashboard": <Dashboard></Dashboard>,
     "validateLogic": <ValidateLogic/>,
     "OCR": <OCR></OCR>,
     "objectDetection": <ObjectDetection></ObjectDetection>,
     "dateCalculator": <DateCalculator></DateCalculator>,
-    "loginPage": <LoginPage></LoginPage>
+    "loginPage": <LoginPage setPage={setSelectedComponentKey}/>,
+    "signupPage": <SignUpPage></SignUpPage>,
   }
   
   const { Header, Content, Sider } = Layout;
@@ -63,7 +65,6 @@ function Home() {
     }
   ];
 
-  const [selectedComponentKey, setSelectedComponentKey] = useState("dashboard");
 
   const {
     token: { colorBgContainer, borderRadiusLG },

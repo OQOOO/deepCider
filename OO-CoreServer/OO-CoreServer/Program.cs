@@ -27,7 +27,7 @@ builder.Services.AddHttpClient();
 
 // custom services
 builder.Services.AddTransient<LocalLLMApiClient>();
-builder.Services.AddTransient<ImageApiClientService>();
+builder.Services.AddTransient<ImageApiClient>();
 builder.Services.AddTransient<OpenApiClient>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>

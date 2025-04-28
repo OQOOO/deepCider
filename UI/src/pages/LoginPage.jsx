@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const LoginPage = () => {
+const LoginPage = ({ setPage }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -16,6 +16,11 @@ const LoginPage = () => {
         console.log('로그인 시도:', { email, password });
         setError(''); // 에러 초기화
         alert('로그인 성공!');
+    };
+
+    const handleSignUp = () => {
+        // 회원가입 페이지로 이동 (예: React Router 사용)
+        setPage("signupPage");
     };
 
     return (
@@ -61,9 +66,24 @@ const LoginPage = () => {
                     border: 'none',
                     borderRadius: '4px',
                     cursor: 'pointer',
+                    marginBottom: '8px',
                 }}
             >
                 로그인
+            </button>
+            <button
+                onClick={handleSignUp}
+                style={{
+                    width: '100%',
+                    padding: '10px',
+                    backgroundColor: '#f0f0f0',
+                    color: '#001529',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                }}
+            >
+                회원가입
             </button>
         </div>
     );
