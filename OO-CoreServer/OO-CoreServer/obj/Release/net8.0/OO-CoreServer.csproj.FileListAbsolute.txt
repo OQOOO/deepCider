@@ -141,3 +141,11 @@ C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\
 C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\development\Project DeepCider\OO-CoreServer\OO-CoreServer\bin\Release\net8.0\System.IdentityModel.Tokens.Jwt.dll

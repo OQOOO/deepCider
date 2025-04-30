@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 
-const SignUpPage = () => {
+const SignUpPage = ({ setPage }) => {
     const [id, setId] = useState('');
-    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
     const handleSignUp = async () => {
         // 간단한 유효성 검사
-        if (!username || !password) {
+        if (!id || !password) {
             setError('아이디와 비밀번호를 입력해주세요.');
             return;
         }
 
-        console.log(password, username)
+        console.log(password, id)
 
         const backEndPort = 37777; // 백엔드 포트 번호
         const api = "signup"; // API 엔드포인트
@@ -24,15 +23,24 @@ const SignUpPage = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
                     id: id,
-                    username: username, 
                     password: password 
                 }),
             });
+
+            if (response.ok) {
+                const data = await response.text();
+                console.log('회원가입 성공:', data);
+                setPage("dashboard"); // 회원가입 성공 시 로그인 페이지로 이동
+            }
+            else {
+                const errorData = await response.text();
+                console.error('회원가입 실패:', errorData);
+                setError(errorData);
+            }
+
         } catch (error) {
             console.error('Error:', error);
         }
-
-        console.log('회원가입 시도:', { username, password });
     };
 
     return (
@@ -45,19 +53,6 @@ const SignUpPage = () => {
                     placeholder="아이디"
                     value={id}
                     onChange={(e) => setId(e.target.value)}
-                    style={{
-                        width: '100%',
-                        padding: '8px',
-                        marginBottom: '8px',
-                        borderRadius: '4px',
-                        border: '1px solid #ccc',
-                    }}
-                />
-                <input
-                    type="text"
-                    placeholder="활동명"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
                     style={{
                         width: '100%',
                         padding: '8px',

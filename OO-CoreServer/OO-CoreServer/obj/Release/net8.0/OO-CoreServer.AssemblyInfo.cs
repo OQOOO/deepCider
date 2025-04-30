@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OO-CoreServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec9ef773c9a5600cbc9cd5064bc5d37297f44aa7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f229f76b225e4bd772b19c22c7a7de2b34496709")]
 [assembly: System.Reflection.AssemblyProductAttribute("OO-CoreServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OO-CoreServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

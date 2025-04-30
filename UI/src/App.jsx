@@ -13,7 +13,7 @@ import DateCalculator from './pages/DateCalculator.jsx';
 import logo from './assets/react.svg'
 import { Login } from '@mui/icons-material';
 import LoginPage from './pages/LoginPage.jsx';
-import AdminPage from './pages/AdminPagd.jsx';
+import AdminPage from './pages/AdminPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 
 function Home() {
@@ -25,12 +25,15 @@ function Home() {
     "objectDetection": <ObjectDetection></ObjectDetection>,
     "dateCalculator": <DateCalculator></DateCalculator>,
     "loginPage": <LoginPage setPage={setSelectedComponentKey}/>,
-    "signupPage": <SignUpPage></SignUpPage>,
+    "signupPage": <SignUpPage setPage={setSelectedComponentKey}/>,
+    "adminPage": <AdminPage/>,
   }
+
+  
   
   const { Header, Content, Sider } = Layout;
   
-  const pageMenuItems = [
+  const toolNavItems = [
     {
       key: 'sub1', // 첫 번째 항목의 key
       icon: React.createElement(UserOutlined),
@@ -58,12 +61,26 @@ function Home() {
         { key: 'tempEmail', label: '임시 이메일' },
       ]
     },
+    
+  ];
+
+  const userNavItems = [
     {
       key: 'loginPage', // 두 번째 항목의 key
       icon: React.createElement(NodeIndexOutlined),
       label: '로그인',
-    }
-  ];
+    },
+  ]
+
+  const adminNavItems = [
+    {
+      key: 'adminPage', // 두 번째 항목의 key
+      icon: React.createElement(NodeIndexOutlined),
+      label: '관리',
+    },
+  ]
+
+  const role = localStorage.getItem("role");
 
 
   const {
@@ -89,24 +106,37 @@ function Home() {
           theme="dark"
           mode="horizontal"
           onClick={(e) => setSelectedComponentKey(e.key)}
-          items={pageMenuItems.filter(item => item.key !== 'loginPage')} // '로그인' 메뉴 제외
-          selectedKeys={[selectedComponentKey]} // 선택된 메뉴 동기화
+          items={toolNavItems.filter(item => item.key)}
+          selectedKeys={[selectedComponentKey]}
           style={{
             flex: 1,
             minWidth: 0,
           }}
         />
-        {/* 로그인 메뉴 */}
+        {
+          role === "admin" && 
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            onClick={(e) => setSelectedComponentKey(e.key)}
+            items={adminNavItems.filter(item => item.key)}
+            selectedKeys={[selectedComponentKey]}
+            style={{
+              flex: 0,
+            }}
+          />
+        }
         <Menu
           theme="dark"
           mode="horizontal"
           onClick={(e) => setSelectedComponentKey(e.key)}
-          items={pageMenuItems.filter(item => item.key === 'loginPage')} // '로그인' 메뉴만 포함
-          selectedKeys={[selectedComponentKey]} // 선택된 메뉴 동기화
+          items={userNavItems.filter(item => item.key)}
+          selectedKeys={[selectedComponentKey]}
           style={{
             flex: 0,
           }}
         />
+        
       </Header>
       <Layout>
         <Layout

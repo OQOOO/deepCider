@@ -1,129 +1,149 @@
-import { React, useEffect, useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
-import {chatClient} from '../client/chatClient.jsx';
-import ResponseBox from '../components/ResponseBox.jsx';
-import ExampleListBox from '../components/ValidateLogicPageComponent/ExampleListBox.jsx';
-
-const scrollDown = {
-    '@keyframes scrollDown': {
-        '0%': {
-            transform: 'translateY(0)',
-        },
-        '100%': {
-            transform: 'translateY(-50%)', // 전체 높이의 절반만큼 이동 (콘텐츠 복제 시)
-            // 만약 복제하지 않는다면, 이 값은 전체 콘텐츠 높이만큼이어야 합니다.
-            // 예: transform: 'translateY(-800px)'
-        },
-    },
-};
+import { chatClient } from '../client/chatClient.jsx';
 
 function ValidateLogic() {
     const inputRef = useRef(null);
-    const [viewData01, setViewData01] = useState("");
-    const [viewData02, setViewData02] = useState("");
+    const [viewData, setViewData] = useState("");
+    const [selectedService, setSelectedService] = useState("ChatGPT"); // 드롭다운 선택 상태
+
+    // 서비스 상태 조회
+    const [isChatGPTEnabled, setIsChatGPTEnabled] = useState(true);
+    const [isDeepSeekEnabled, setIsDeepSeekEnabled] = useState(false);
+
+    useEffect(() => {
+        fetch("http://localhost:37777/serviceStatus")
+            .then((res) => {
+                if (!res.ok) throw new Error("서버 응답 오류");
+                return res.json();
+            })
+            .then((data) => {
+                setIsChatGPTEnabled(data.isChatGPTEnabled);
+                setIsDeepSeekEnabled(data.isServerLLMEnabled); // DeepSeek == 서버 LLM이라고 가정
+            })
+            .catch((err) => {
+                console.error("상태 조회 실패:", err);
+            });
+    }, []);
 
     // 입력 화면의 값을 받아 서버로 전송 -> 반환값 화면에 표시
-    const sendMessage = (bottonNum) => {
-        const apiMap = { // api 연결에 사용할 path
-            1:"validateLogic",
-            //1:"tApi/openAI",
-            2:"2"
+    const sendMessage = () => {
+        const apiMap = {
+            ChatGPT: "validateLogic/openAI",
+            Deepseek: "validateLogic/deepseek",
         };
 
-        const viewMap = { // 반환값 화면에 표시할 컴포넌트 선택
-            1: setViewData01,
-            2: setViewData02
-        };
-
-        let api = apiMap[bottonNum];
-        let setViewData = viewMap[bottonNum];
+        const api = apiMap[selectedService];
+        console.log(api);
 
         setViewData(""); // 기존 데이터 초기화
         chatClient(inputRef.current.value, api, setViewData); // onMessageUpdate로 실시간 업데이트
-        //AspNetChatClient(inputRef.current.value, api, setViewData);
     };
 
     return (
         <Container maxWidth="md" sx={{ textAlign: 'left' }}>
-            <Box sx={{ 
-                py: 3,
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                minHeight: '100%',
-                gap: 4 // 간격 유지
-            }}>
-                
-
+            <Box
+                sx={{
+                    py: 3,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    minHeight: '100%',
+                    gap: 4, // 간격 유지
+                }}
+            >
                 {/* 메인 콘텐츠 영역 */}
-                <Box sx={{ width: '700px', flexShrink: 0 }}> 
-                    <Typography variant="h4" component="h1" gutterBottom sx={{ 
-                        fontWeight: 'bold', 
-                        color: 'text.primary' 
-                    }}>
+                <Box sx={{ width: '700px', flexShrink: 0 }}>
+                    <Typography
+                        variant="h4"
+                        component="h1"
+                        gutterBottom
+                        sx={{
+                            fontWeight: 'bold',
+                            color: 'text.primary',
+                        }}
+                    >
                         논리적 오류 찾기
                     </Typography>
-                    <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 3 }}>
+                    <Typography
+                        variant="subtitle1"
+                        color="text.secondary"
+                        sx={{ mb: 3 }}
+                    >
                         문장에서 논리적 오류를 찾아드립니다.
                     </Typography>
 
-                    <Box sx={{ width: '100%' }}> 
+                    <Box sx={{ width: '100%' }}>
                         <TextField
-                            id="outlined-multiline-static" 
+                            id="outlined-multiline-static"
                             label="대화 입력"
                             inputRef={inputRef}
                             multiline
-                            rows={5} 
+                            rows={5}
                             variant="standard"
                             sx={{
-                                width: "100%",
-                                mb: 2
+                                width: '100%',
+                                mb: 2,
                             }}
-                            
                         />
 
-                        <Button 
-                            variant="contained" 
-                            onClick={() => sendMessage(1)} 
-                            size="large" 
+                        <Box
                             sx={{
-                                mb: 3, 
-                                backgroundColor: '#001529',
-                                '&:hover': {
-                                    backgroundColor: '#002140',
-                                },
-                                boxShadow: 1 
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 2, // 버튼과 드롭다운 간격
                             }}
                         >
-                            논리적 오류 찾기
-                        </Button>
+                            <Button
+                                variant="contained"
+                                onClick={sendMessage}
+                                size="large"
+                                sx={{
+                                    mb: 3,
+                                    backgroundColor: '#001529',
+                                    '&:hover': {
+                                        backgroundColor: '#002140',
+                                    },
+                                    boxShadow: 1,
+                                }}
+                            >
+                                논리적 오류 찾기
+                            </Button>
+                            <Select
+                                value={selectedService}
+                                onChange={(e) => setSelectedService(e.target.value)}
+                                sx={{
+                                    minWidth: 150,
+                                    height: 40,
+                                    marginBottom: 3,
+                                }}
+                            >
+                                <MenuItem value="ChatGPT" disabled={!isChatGPTEnabled}>
+                                    {isChatGPTEnabled ? "ChatGPT" : "ChatGPT (현재 사용 불가)"}
+                                </MenuItem>
+                                <MenuItem value="Deepseek" disabled={!isDeepSeekEnabled}>
+                                    {isDeepSeekEnabled ? "Deepseek" : "Deepseek (현재 사용 불가)"}
+                                </MenuItem>
+                            </Select>
+                        </Box>
+
                         <Box>
                             주의: 정확하지 않은 결과가 나올 수 있습니다.
                         </Box>
 
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
 
-                        {/* <ResponseBox sx={{ 
-                            border: '1px solid', 
-                            borderColor: 'divider', 
-                            p: 2, 
-                            borderRadius: 1, 
-                            minHeight: 150 
-                        }}>
-                            {viewData01}
-                        </ResponseBox> */}
-                        <div dangerouslySetInnerHTML={{ __html: viewData01 }} />
+                        <div dangerouslySetInnerHTML={{ __html: viewData }} />
                     </Box>
                 </Box>
-
-                {/* 논리적 오류 예시 박스 영역 (애니메이션 적용) */}
-                {/* <ExampleListBox /> */}
             </Box>
         </Container>
     );

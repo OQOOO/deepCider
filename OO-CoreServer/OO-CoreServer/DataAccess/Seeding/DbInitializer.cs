@@ -12,14 +12,14 @@ namespace OO_CoreServer.DataAccess.Seeding
             context.Database.EnsureDeleted(); // DB의 내용 완전 삭제(개발 편의용)
             context.Database.Migrate();
 
-            if (!context.Users.Any(u => u.role == "admin"))
+            if (!context.Users.Any(u => u.Role == "admin"))
             {
                 var admin = new User
                 {
                     Id = "admin",
                     Username = "admin",
                     Password = "admin123",
-                    role = "admin"
+                    Role = "admin"
                 };
                 context.Users.Add(admin);
                 context.SaveChanges();

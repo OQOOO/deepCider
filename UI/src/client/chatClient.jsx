@@ -7,7 +7,7 @@ export async function chatClient(user_message, api, onMessageUpdate) {
         const response = await fetch(`http://localhost:${backEndPort}/${api}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: user_message }),
+            body: JSON.stringify({ message: user_message}),
         });
         if (!response.ok) throw new Error("Network response was not ok");
 
@@ -64,7 +64,7 @@ export async function chatClient(user_message, api, onMessageUpdate) {
             /**청크 관련 로직 끝 (클라이언트에서 받음)*/
 
             // 여러 줄이 한꺼번에 올 수 있으므로 \n 기준으로 분해
-            // 이런 처리는 서버에서 해서 보내는게 더 좋을듯(적어도 일부는)
+            // 이런 처리는 서버에서 관리하도록 변경할것
 
             //gpt에서 받음
             console.log(chunk);
