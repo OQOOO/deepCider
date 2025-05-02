@@ -29,6 +29,26 @@ const OCR = () => {
     const [originalImageSrc, setOriginalImageSrc] = useState(null);  // 원본 이미지 URL 저장
     const [isDragActive, setIsDragActive] = useState(false);
 
+    const [isOcrEnabled, setIsOcrEnabled] = useState(false); // OCR 서비스 활성화 여부
+
+    const serverURL = "http://localhost:37777";
+
+    useEffect(() => {
+        const ocrStatusCheck = async () => {
+            try {
+                const response = await fetch(serverURL + "/serviceStatus/OCR");
+                if (!response.ok) throw new Error("서버 응답 오류");
+                const data = await response.json();
+                setIsOcrEnabled(data.enabled && data.healthy);
+            } catch (error) {
+                console.error("서버가 응답하지 않습니다.", error);
+                setIsOcrEnabled(false); // 서버가 응답하지 않으면 비활성화
+            }
+        }
+        ocrStatusCheck();
+        // 서버 상태 체크
+    }, []);
+
     // 파일 선택
     const handleFileChange = (event) => {
         setUploadCount(0);
@@ -184,29 +204,43 @@ const OCR = () => {
                     이미지 속 글자를 복사 가능한 텍스트로 추출합니다.
                 </Typography>
 
+                {!isOcrEnabled && (
+                    <Typography 
+                        variant="h6" 
+                        color="error" 
+                        sx={{ textAlign: 'center', mb: 3 }}
+                    >
+                        지금은 사용할 수 없습니다
+                    </Typography>
+                )}
+
                 <StyledPaper elevation={0} sx={{ mb: 3 }}>
                     <Stack direction="row" spacing={2} sx={{ mb: OCRResponse ? 2 : 0 }}>
                         <Button 
                             variant="contained" 
                             onClick={triggerFileInput}
+                            disabled={!isOcrEnabled} // 버튼 비활성화
                             sx={{
-                                backgroundColor: '#001529',
+                                backgroundColor: isOcrEnabled ? '#001529' : '#d3d3d3', // 비활성화 시 회색
+                                color: isOcrEnabled ? 'white' : '#808080',
                                 '&:hover': {
-                                    backgroundColor: '#002140',
+                                    backgroundColor: isOcrEnabled ? '#002140' : '#d3d3d3',
                                 },
                             }}
                         >
                             파일 선택
                         </Button>
-                        <input ref={fileInputRef} type="file" onChange={handleFileChange} style={{display:'none'}}/>
+                        <input ref={fileInputRef} type="file" onChange={handleFileChange} style={{ display: 'none' }} />
 
                         <Button 
                             variant="contained" 
                             onClick={handleUpload}
+                            disabled={!isOcrEnabled} // 버튼 비활성화
                             sx={{
-                                backgroundColor: '#001529',
+                                backgroundColor: isOcrEnabled ? '#001529' : '#d3d3d3', // 비활성화 시 회색
+                                color: isOcrEnabled ? 'white' : '#808080',
                                 '&:hover': {
-                                    backgroundColor: '#002140',
+                                    backgroundColor: isOcrEnabled ? '#002140' : '#d3d3d3',
                                 },
                             }}
                         >
@@ -218,12 +252,13 @@ const OCR = () => {
                                 variant="outlined" 
                                 startIcon={<RestartAltIcon />}
                                 onClick={handleReset}
+                                disabled={!isOcrEnabled} // 버튼 비활성화
                                 sx={{
-                                    borderColor: '#001529',
-                                    color: '#001529',
+                                    borderColor: isOcrEnabled ? '#001529' : '#d3d3d3',
+                                    color: isOcrEnabled ? '#001529' : '#808080',
                                     '&:hover': {
-                                        borderColor: '#002140',
-                                        backgroundColor: 'rgba(0, 21, 41, 0.04)',
+                                        borderColor: isOcrEnabled ? '#002140' : '#d3d3d3',
+                                        backgroundColor: isOcrEnabled ? 'rgba(0, 21, 41, 0.04)' : 'transparent',
                                     },
                                 }}
                             >
@@ -270,11 +305,12 @@ const OCR = () => {
                     ) : (
                         <ImageDropZone
                             isDragActive={isDragActive}
-                            onDragEnter={handleDragEnter}
-                            onDragLeave={handleDragLeave}
-                            onDragOver={handleDragOver}
-                            onDrop={handleDrop}
-                            onClick={triggerFileInput}
+                            onDragEnter={isOcrEnabled ? handleDragEnter : undefined} // 드래그 비활성화
+                            onDragLeave={isOcrEnabled ? handleDragLeave : undefined} // 드래그 비활성화
+                            onDragOver={isOcrEnabled ? handleDragOver : undefined} // 드래그 비활성화
+                            onDrop={isOcrEnabled ? handleDrop : undefined} // 드래그 비활성화
+                            onClick={isOcrEnabled ? triggerFileInput : undefined} // 클릭 비활성화
+                            disabled={!isOcrEnabled} // 드래그 영역 비활성화
                         />
                     )}
                 </StyledPaper>

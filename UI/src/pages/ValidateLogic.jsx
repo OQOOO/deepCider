@@ -8,6 +8,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 import { chatClient } from '../client/chatClient.jsx';
+import ServerStatusChecker from '../client/ServerStatusChecker.jsx';
 
 function ValidateLogic() {
     const inputRef = useRef(null);
@@ -16,22 +17,40 @@ function ValidateLogic() {
 
     // 서비스 상태 조회
     const [isChatGPTEnabled, setIsChatGPTEnabled] = useState(true);
-    const [isDeepSeekEnabled, setIsDeepSeekEnabled] = useState(false);
+    const [isDeepseekEnabled, setIsDeepseekEnabled] = useState(false);
+
+    const serverURL = "http://localhost:37777";
 
     useEffect(() => {
-        fetch("http://localhost:37777/serviceStatus")
-            .then((res) => {
-                if (!res.ok) throw new Error("서버 응답 오류");
-                return res.json();
-            })
-            .then((data) => {
-                setIsChatGPTEnabled(data.isChatGPTEnabled);
-                setIsDeepSeekEnabled(data.isServerLLMEnabled); // DeepSeek == 서버 LLM이라고 가정
-            })
-            .catch((err) => {
-                console.error("상태 조회 실패:", err);
-            });
+
+        const chatGPTStatusCheck = async () => {
+            try {
+                const response = await fetch(serverURL + "/serviceStatus/openAI");
+                if (!response.ok) throw new Error("서버 응답 오류");
+                const data = await response.json();
+                setIsChatGPTEnabled(data.enabled && data.healthy);
+            } catch (error) {
+                console.error("서버가 응답하지 않습니다.", error);
+                setIsChatGPTEnabled(false); // 서버가 응답하지 않으면 비활성화
+            }
+        }
+        chatGPTStatusCheck();
+        const deepseekStatusCheck = async () => {
+            try {
+                const response = await fetch(serverURL + "/serviceStatus/deepseek");
+                if (!response.ok) throw new Error("서버 응답 오류");
+                const data = await response.json();
+                setIsDeepseekEnabled(data.enabled && data.healthy);
+            } catch (error) {
+                console.error("서버가 응답하지 않습니다.", error);
+                setIsDeepseekEnabled(false); // 서버가 응답하지 않으면 비활성화
+            }
+        }
+        deepseekStatusCheck();
+
     }, []);
+
+    
 
     // 입력 화면의 값을 받아 서버로 전송 -> 반환값 화면에 표시
     const sendMessage = () => {
@@ -128,8 +147,8 @@ function ValidateLogic() {
                                 <MenuItem value="ChatGPT" disabled={!isChatGPTEnabled}>
                                     {isChatGPTEnabled ? "ChatGPT" : "ChatGPT (현재 사용 불가)"}
                                 </MenuItem>
-                                <MenuItem value="Deepseek" disabled={!isDeepSeekEnabled}>
-                                    {isDeepSeekEnabled ? "Deepseek" : "Deepseek (현재 사용 불가)"}
+                                <MenuItem value="Deepseek" disabled={!isDeepseekEnabled}>
+                                    {isDeepseekEnabled ? "Deepseek" : "Deepseek (현재 사용 불가)"}
                                 </MenuItem>
                             </Select>
                         </Box>

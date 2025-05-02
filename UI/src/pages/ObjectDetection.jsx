@@ -42,7 +42,26 @@ const ObjectDetection = () => {
     const [isDragActive, setIsDragActive] = useState(false);
     const [detectionCounts, setDetectionCounts] = useState({});
 
-    // 클래스 번호와 한글 이름을 매핑하는 Map
+    const [isObjectDetectionEnabled, setIsObjectDetectionEnabled] = useState(true); // 서버 상태 체크
+    const serverURL = "http://localhost:37777"; // 서버 URL
+    
+    useEffect(() => {
+        const serverStatusCheck = async () => {
+            try {
+                const response = await fetch(serverURL + "/serviceStatus/objectDetection");
+                if (!response.ok) throw new Error("서버 응답 오류");
+                const data = await response.json();
+                setIsObjectDetectionEnabled(data.enabled && data.healthy);
+            } catch (error) {
+                console.error("서버가 응답하지 않습니다.", error);
+                setIsObjectDetectionEnabled(false); // 서버가 응답하지 않으면 비활성화
+            }
+        }
+        serverStatusCheck();
+    }, []);
+
+
+    // 클래스 번호와 한글 이름을 매핑하는 Map... 서버측으로 이동?
     const classMap = new Map([
         [0, '사람'], [1, '자전거'], [2, '자동차'], [3, '오토바이'], [4, '비행기'],
         [5, '버스'], [6, '기차'], [7, '트럭'], [8, '보트'], [9, '신호등'],
@@ -197,29 +216,43 @@ const ObjectDetection = () => {
                     이미지 속 물체를 탐지합니다.
                 </Typography>
 
+                {!isObjectDetectionEnabled && (
+                    <Typography 
+                        variant="h6" 
+                        color="error" 
+                        sx={{ textAlign: 'center', mb: 3 }}
+                    >
+                        지금은 사용할 수 없습니다
+                    </Typography>
+                )}
+
                 <StyledPaper elevation={0} sx={{ mb: 3 }}>
                     <Stack direction="row" spacing={2}>
                         <Button 
                             variant="contained" 
                             onClick={triggerFileInput}
+                            disabled={!isObjectDetectionEnabled} // 버튼 비활성화
                             sx={{
-                                backgroundColor: '#001529',
+                                backgroundColor: isObjectDetectionEnabled ? '#001529' : '#d3d3d3', // 비활성화 시 회색
+                                color: isObjectDetectionEnabled ? 'white' : '#808080',
                                 '&:hover': {
-                                    backgroundColor: '#002140',
+                                    backgroundColor: isObjectDetectionEnabled ? '#002140' : '#d3d3d3',
                                 },
                             }}
                         >
                             파일 선택
                         </Button>
-                        <input ref={fileInputRef} type="file" onChange={handleFileChange} style={{display:'none'}}/>
+                        <input ref={fileInputRef} type="file" onChange={handleFileChange} style={{ display: 'none' }} />
 
                         <Button 
                             variant="contained" 
                             onClick={handleUpload}
+                            disabled={!isObjectDetectionEnabled} // 버튼 비활성화
                             sx={{
-                                backgroundColor: '#001529',
+                                backgroundColor: isObjectDetectionEnabled ? '#001529' : '#d3d3d3', // 비활성화 시 회색
+                                color: isObjectDetectionEnabled ? 'white' : '#808080',
                                 '&:hover': {
-                                    backgroundColor: '#002140',
+                                    backgroundColor: isObjectDetectionEnabled ? '#002140' : '#d3d3d3',
                                 },
                             }}
                         >
@@ -231,12 +264,13 @@ const ObjectDetection = () => {
                                 variant="outlined" 
                                 startIcon={<RestartAltIcon />}
                                 onClick={handleReset}
+                                disabled={!isObjectDetectionEnabled} // 버튼 비활성화
                                 sx={{
-                                    borderColor: '#001529',
-                                    color: '#001529',
+                                    borderColor: isObjectDetectionEnabled ? '#001529' : '#d3d3d3',
+                                    color: isObjectDetectionEnabled ? '#001529' : '#808080',
                                     '&:hover': {
-                                        borderColor: '#002140',
-                                        backgroundColor: 'rgba(0, 21, 41, 0.04)',
+                                        borderColor: isObjectDetectionEnabled ? '#002140' : '#d3d3d3',
+                                        backgroundColor: isObjectDetectionEnabled ? 'rgba(0, 21, 41, 0.04)' : 'transparent',
                                     },
                                 }}
                             >
@@ -279,11 +313,12 @@ const ObjectDetection = () => {
                     ) : (
                         <ImageDropZone
                             isDragActive={isDragActive}
-                            onDragEnter={handleDragEnter}
-                            onDragLeave={handleDragLeave}
-                            onDragOver={handleDragOver}
-                            onDrop={handleDrop}
-                            onClick={triggerFileInput}
+                            onDragEnter={isObjectDetectionEnabled ? handleDragEnter : undefined} // 드래그 비활성화
+                            onDragLeave={isObjectDetectionEnabled ? handleDragLeave : undefined} // 드래그 비활성화
+                            onDragOver={isObjectDetectionEnabled ? handleDragOver : undefined} // 드래그 비활성화
+                            onDrop={isObjectDetectionEnabled ? handleDrop : undefined} // 드래그 비활성화
+                            onClick={isObjectDetectionEnabled ? triggerFileInput : undefined} // 클릭 비활성화
+                            disabled={!isObjectDetectionEnabled} // 드래그 영역 비활성화
                         />
                     )}
                 </StyledPaper>

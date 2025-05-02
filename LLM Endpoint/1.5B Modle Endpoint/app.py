@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import pipeline
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 import asyncio
+import datetime
 
 # 모델 로드
 # text_generator = pipeline("text-generation", model="distilgpt2", device=0)  # GPU 사용
@@ -36,15 +37,25 @@ async def generate_stream(prompt: str):
 async def generate(request: PromptRequest):
     return StreamingResponse(generate_stream(request.prompt), media_type="text/event-stream")
 
+@app.get("/health")
+async def health_check():
+    return JSONResponse(
+        content={
+            "status": "healthy",
+            "timestamp": datetime.datetime.utcnow().isoformat()
+        },
+        status_code=200
+    )
+
 
 '''
 CommendLines
 
 
-docker build -t cider-llm-endpoint-1.5b .
+docker build -t llm-endpoint-1.5b .
 
 # llm 엔드포인트 컨테이너
-docker run --gpus all -p 5000:5000 cider-llm-endpoint-1.5b
+docker run --gpus all -p 5000:5000 llm-endpoint-1.5b
 
 # ocr 엔드포인트 컨테이너
 docker run --gpus all -it -p 5200:5200 ocr-endpoint

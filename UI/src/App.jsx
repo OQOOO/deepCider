@@ -17,7 +17,7 @@ import AdminPage from './pages/AdminPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 
 function Home() {
-  const [selectedComponentKey, setSelectedComponentKey] = useState("dashboard");
+  const [selectedComponentKey, setSelectedComponentKey] = useState("validateLogic");
   const componentsMap = {
     "dashboard": <Dashboard></Dashboard>,
     "validateLogic": <ValidateLogic/>,
@@ -64,13 +64,26 @@ function Home() {
     
   ];
 
+  const role = localStorage.getItem("role");
+
   const userNavItems = [
-    {
-      key: 'loginPage', // 두 번째 항목의 key
-      icon: React.createElement(NodeIndexOutlined),
-      label: '로그인',
-    },
-  ]
+    role
+      ? {
+          key: 'logout', // 로그아웃 버튼
+          icon: React.createElement(NodeIndexOutlined),
+          label: '로그아웃',
+          onClick: () => {
+            localStorage.removeItem("token"); // 토큰 제거
+            localStorage.removeItem("role"); // 사용자 역할 제거
+            window.location.reload(); // 페이지 새로고침
+          },
+        }
+      : {
+          key: 'loginPage', // 로그인 버튼
+          icon: React.createElement(NodeIndexOutlined),
+          label: '로그인',
+        },
+  ];
 
   const adminNavItems = [
     {
@@ -79,9 +92,6 @@ function Home() {
       label: '관리',
     },
   ]
-
-  const role = localStorage.getItem("role");
-
 
   const {
     token: { colorBgContainer, borderRadiusLG },

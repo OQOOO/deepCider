@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OO_CoreServer.Services;
+using OO_CoreServer.Services.Clients;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,19 +12,23 @@ namespace OO_CoreServer.Controllers
     public class AdminController : ControllerBase
     {
         private ServiceStatus _status;
-        public AdminController(ServiceStatus status) 
+        public OpenAiApiClient _openAiApiClient;
+        public LocalLLMApiClient _localLLMApiClient;
+        public AdminController(ServiceStatus status, LocalLLMApiClient localLLMApiClient, OpenAiApiClient openAiApiClient) 
         { 
             _status = status;
+            _openAiApiClient = openAiApiClient;
+            _localLLMApiClient = localLLMApiClient;
         }
 
         // GET: api/<AdminController>
         [HttpGet("/serviceStatus")]
-        public IActionResult GetServiceStatus()
+        public async Task<IActionResult> GetServiceStatus()
         {
             return Ok(new
             {
                 isChatGPTEnabled = _status.IsChatGPTEnabled,
-                isServerLLMEnabled = _status.IsLocalLLMEnabled
+                isServerLLMEnabled = _status.IsLocalLLMEnabled,
             });
         }
 
@@ -34,17 +39,51 @@ namespace OO_CoreServer.Controllers
             _status.IsChatGPTEnabled = enabled;
             Console.WriteLine("_status.IsChatGPTEnabled: "+_status.IsChatGPTEnabled);
 
-            return Ok(_status.IsChatGPTEnabled);
+            return Ok(new
+                {
+                    serviceEnabled = _status.IsChatGPTEnabled
+                }
+            );
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("/setServiceStatus/deepseek")]
-        public IActionResult SetDeepseekEnabled([FromBody] bool enabled)
+        public async Task<IActionResult> SetDeepseekEnabled([FromBody] bool enabled)
         {
             _status.IsLocalLLMEnabled = enabled;
             Console.WriteLine("_status.IsLocalLLMEnabled: " + _status.IsLocalLLMEnabled);
 
-            return Ok(_status.IsLocalLLMEnabled);
+            // return Ok(_status.IsLocalLLMEnabled);
+
+            return Ok(new 
+                { 
+                    serviceEnabled = _status.IsLocalLLMEnabled,
+                }
+            );
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("/setServiceStatus/OCR")]
+        public async Task<IActionResult> SetOCREnabled([FromBody] bool enabled)
+        {
+            _status.IsOCREnabled = enabled;
+            Console.WriteLine("OCREnabled:" + enabled);
+
+            return Ok(new {
+                serviceEnabled = _status.IsOCREnabled,
+            });
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("/setServiceStatus/ObjectDetection")]
+        public async Task<IActionResult> SetObjectDetectionEnabled([FromBody] bool enabled)
+        {
+            _status.IsObjectDetectionEnabled = enabled;
+
+            return Ok(new
+            {
+                serviceEnabled = _status.IsObjectDetectionEnabled,
+            });
         }
 
     }

@@ -7,10 +7,10 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
 using System.Net.Http;
-using OO_CoreServer.Services;
 using Microsoft.EntityFrameworkCore;
 using OO_CoreServer.DataAccess;
 using OO_CoreServer.DataAccess.Entities;
+using OO_CoreServer.Services.Clients;
 
 namespace OO_CoreServer.Controllers
 {
@@ -19,9 +19,9 @@ namespace OO_CoreServer.Controllers
     public class ThirdPartyApiController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private OpenApiClient _openApiClient;
+        private OpenAiApiClient _openApiClient;
 
-        public ThirdPartyApiController(OpenApiClient openApiClient, AppDbContext context)
+        public ThirdPartyApiController(OpenAiApiClient openApiClient, AppDbContext context)
         {
             _openApiClient = openApiClient;
             _context = context;

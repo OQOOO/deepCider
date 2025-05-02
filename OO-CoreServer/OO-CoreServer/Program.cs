@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using OO_CoreServer.DataAccess;
 using OO_CoreServer.DataAccess.Seeding;
 using OO_CoreServer.Services;
+using OO_CoreServer.Services.Clients;
 using System;
 using System.Text;
 
@@ -30,7 +31,8 @@ builder.Services.AddHttpClient();
 // custom services
 builder.Services.AddTransient<LocalLLMApiClient>();
 builder.Services.AddTransient<ImageApiClient>();
-builder.Services.AddTransient<OpenApiClient>();
+builder.Services.AddTransient<OpenAiApiClient>();
+
 builder.Services.AddSingleton<ServiceStatus>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>

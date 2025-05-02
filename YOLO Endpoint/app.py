@@ -52,7 +52,14 @@ async def ocr_endpoint(file: UploadFile = File(...)):
     # 결과 반환
     return JSONResponse(content={"success": True, "message": "Object Detection 처리 완료", "data": response_data})
 
-
+@app.get("/health")
+async def health_check():
+    return JSONResponse(
+        content={
+            "status": "healthy",
+        },
+        status_code=200
+    )
 
 
 '''
