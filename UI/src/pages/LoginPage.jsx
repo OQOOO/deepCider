@@ -5,6 +5,8 @@ const LoginPage = ({ setPage }) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+    const serverUrl = import.meta.env.VITE_CORE_SERVER_URL;
+
     const handleLogin = async () => {
         // 간단한 유효성 검사
         if (!id || !password) {
@@ -13,12 +15,11 @@ const LoginPage = ({ setPage }) => {
         }
 
         // 로그인 로직 (예: API 호출)
-        const backEndPort = 37777; // 백엔드 포트 번호
         const api = "login"; // API 엔드포인트
         const token = null;
 
         try {
-            const response = await fetch(`http://localhost:${backEndPort}/${api}`, {
+            const response = await fetch(`${serverUrl}/${api}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 

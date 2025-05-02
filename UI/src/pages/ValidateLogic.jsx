@@ -20,13 +20,13 @@ function ValidateLogic() {
     const [isChatGPTEnabled, setIsChatGPTEnabled] = useState(true);
     const [isDeepseekEnabled, setIsDeepseekEnabled] = useState(false);
 
-    const serverURL = "http://localhost:37777";
+    const serverUrl = import.meta.env.VITE_CORE_SERVER_URL;
 
     useEffect(() => {
 
         const chatGPTStatusCheck = async () => {
             try {
-                const response = await fetch(serverURL + "/serviceStatus/openAI");
+                const response = await fetch(serverUrl + "/serviceStatus/openAI");
                 if (!response.ok) throw new Error("서버 응답 오류");
                 const data = await response.json();
                 setIsChatGPTEnabled(data.enabled && data.healthy);
@@ -38,7 +38,7 @@ function ValidateLogic() {
         chatGPTStatusCheck();
         const deepseekStatusCheck = async () => {
             try {
-                const response = await fetch(serverURL + "/serviceStatus/deepseek");
+                const response = await fetch(serverUrl + "/serviceStatus/deepseek");
                 if (!response.ok) throw new Error("서버 응답 오류");
                 const data = await response.json();
                 setIsDeepseekEnabled(data.enabled && data.healthy);

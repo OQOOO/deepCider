@@ -30,13 +30,12 @@ const OCR = () => {
     const [isDragActive, setIsDragActive] = useState(false);
 
     const [isOcrEnabled, setIsOcrEnabled] = useState(true); // OCR 서비스 활성화 여부
-
-    const serverURL = "http://localhost:37777";
+    const serverUrl = import.meta.env.VITE_CORE_SERVER_URL;
 
     useEffect(() => {
         const ocrStatusCheck = async () => {
             try {
-                const response = await fetch(serverURL + "/serviceStatus/OCR");
+                const response = await fetch(serverUrl + "/serviceStatus/OCR");
                 if (!response.ok) throw new Error("서버 응답 오류");
                 const data = await response.json();
                 setIsOcrEnabled(data.enabled && data.healthy);
@@ -283,6 +282,7 @@ const OCR = () => {
                         </>
                     )}
                 </StyledPaper>
+                
 
                 <StyledPaper elevation={0}>
                     {imageSrc ? (
@@ -314,6 +314,10 @@ const OCR = () => {
                         />
                     )}
                 </StyledPaper>
+                
+                {file && <Typography variant="subtitle1" color="text.secondary" paragraph>
+                    이미지를 드래그하여 자를 수 있습니다.
+                </Typography>}
             </Box>
         </Container>
     );

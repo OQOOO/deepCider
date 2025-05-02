@@ -9,7 +9,7 @@ namespace OO_CoreServer.DataAccess.Seeding
 
         public static void Seed(AppDbContext context)
         {
-            context.Database.EnsureDeleted(); // DB의 내용 완전 삭제(개발 편의용)
+            context.Database.EnsureDeleted(); // DB의 내용 완전 삭제 (개발 편의용)
             context.Database.Migrate();
 
             if (!context.Users.Any(u => u.Role == "admin"))

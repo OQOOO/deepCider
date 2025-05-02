@@ -1,11 +1,11 @@
 export async function ImageClient(api, imageFile) {
-    let backEndPort = "37777";
+    const serverUrl = import.meta.env.VITE_CORE_SERVER_URL;
 
     const formData = new FormData();
     formData.append("file", imageFile);
 
     try {
-        const response = await fetch(`http://localhost:${backEndPort}/${api}`, {
+        const response = await fetch(`${serverUrl}/${api}`, {
             method: "POST",
             body: formData
         });

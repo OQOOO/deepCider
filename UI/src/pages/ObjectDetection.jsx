@@ -43,12 +43,12 @@ const ObjectDetection = () => {
     const [detectionCounts, setDetectionCounts] = useState({});
 
     const [isObjectDetectionEnabled, setIsObjectDetectionEnabled] = useState(true); // 서버 상태 체크
-    const serverURL = "http://localhost:37777"; // 서버 URL
+    const serverUrl = import.meta.env.VITE_CORE_SERVER_URL;
     
     useEffect(() => {
         const serverStatusCheck = async () => {
             try {
-                const response = await fetch(serverURL + "/serviceStatus/objectDetection");
+                const response = await fetch(serverUrl+ "/serviceStatus/objectDetection");
                 if (!response.ok) throw new Error("서버 응답 오류");
                 const data = await response.json();
                 setIsObjectDetectionEnabled(data.enabled && data.healthy);
@@ -322,6 +322,9 @@ const ObjectDetection = () => {
                         />
                     )}
                 </StyledPaper>
+                {file && <Typography variant="subtitle1" color="text.secondary" paragraph>
+                    이미지를 드래그하여 자를 수 있습니다.
+                </Typography>}
             </Box>
         </Container>
     );

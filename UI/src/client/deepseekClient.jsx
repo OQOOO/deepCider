@@ -1,10 +1,10 @@
 export async function deepseekClient(user_message, api, onMessageUpdate) {
 
     
-    let backEndPort = "37777";
+    const serverUrl = import.meta.env.VITE_CORE_SERVER_URL;
 
     try {
-        const response = await fetch(`http://localhost:${backEndPort}/${api}`, {
+        const response = await fetch(`${serverUrl}/${api}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: user_message}),

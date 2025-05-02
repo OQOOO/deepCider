@@ -8,13 +8,13 @@ const ServiceCard = ({serviceName, statusApi, toggleApi}) => {
     const [cardMessage, setCardMessage] = useState("상태 확인중...");
     const [buttonText, setButtonText] = useState("대기중"); // 버튼 텍스트 상태
 
-    const serverURL = "http://localhost:37777";
+    const serverUrl = import.meta.env.VITE_CORE_SERVER_URL;
 
     useEffect(() => {
 
         const checkServiceStatus = async () => {
             try {
-                const response = await fetch(serverURL+statusApi);
+                const response = await fetch(serverUrl+statusApi);
                 if (!response.ok) throw new Error("서버 응답 오류");
                 const data = await response.json();
                 setIsServerRunning(true);
@@ -43,7 +43,7 @@ const ServiceCard = ({serviceName, statusApi, toggleApi}) => {
         const token = localStorage.getItem("token");
         // const backEndPort = "37777";
         // const api = "setServiceStatus/deepseek"; // API 엔드포인트
-        const response = await fetch(serverURL+toggleApi, {
+        const response = await fetch(serverUrl+toggleApi, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

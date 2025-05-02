@@ -55,7 +55,7 @@ CommendLines
 docker build -t llm-endpoint-1.5b .
 
 # llm 엔드포인트 컨테이너
-docker run --gpus all -p 5000:5000 llm-endpoint-1.5b
+docker run --gpus all -p 5100:5000 llm-endpoint-1.5b
 
 # ocr 엔드포인트 컨테이너
 docker run --gpus all -it -p 5200:5200 ocr-endpoint

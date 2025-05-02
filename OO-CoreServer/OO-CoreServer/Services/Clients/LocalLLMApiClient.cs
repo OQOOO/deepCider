@@ -21,7 +21,7 @@ namespace OO_CoreServer.Services.Clients
 
             try
             {
-                var response = await _httpClient.GetAsync("http://host.docker.internal:5000/health");
+                var response = await _httpClient.GetAsync("http://host.docker.internal:5100/health");
                 return true;
             }
             catch (Exception ex)
@@ -41,7 +41,7 @@ namespace OO_CoreServer.Services.Clients
             var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
             using var response = await _httpClient.SendAsync(
-                new HttpRequestMessage(HttpMethod.Post, "http://host.docker.internal:5000/predict")
+                new HttpRequestMessage(HttpMethod.Post, "http://host.docker.internal:5100/predict")
                 {
                     Content = content
                 },

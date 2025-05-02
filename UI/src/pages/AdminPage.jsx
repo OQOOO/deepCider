@@ -5,13 +5,15 @@ const AdminPage = () => {
     const [serverStatus, setServerStatus] = useState(false);
     const [serverStatusMessage, setServerStatusMessage] = useState("서버 상태 확인 중...");
 
+    const serverUrl = import.meta.env.VITE_CORE_SERVER_URL;
 
     // 카드별로 각각 서버 체크 등의 기능을 수행하는 컴포넌트로 분리
     useEffect(() => {
         const serverCheck = async () => {
 
             try {
-                const response = await fetch("http://localhost:37777/serverHealth");
+
+                const response = await fetch(serverUrl+"/serverHealth");
                 if (!response.ok) throw new Error("서버 응답 오류");
                 const data = await response.json();
                 console.log(data.healthy);

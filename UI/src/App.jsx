@@ -31,6 +31,8 @@ function Home() {
   }
 
   useEffect(() => {
+    const serverUrl = import.meta.env.VITE_CORE_SERVER_URL;
+
     const token = localStorage.getItem("token");
     if (!token) return;
 
