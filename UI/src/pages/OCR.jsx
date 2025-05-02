@@ -29,7 +29,7 @@ const OCR = () => {
     const [originalImageSrc, setOriginalImageSrc] = useState(null);  // 원본 이미지 URL 저장
     const [isDragActive, setIsDragActive] = useState(false);
 
-    const [isOcrEnabled, setIsOcrEnabled] = useState(false); // OCR 서비스 활성화 여부
+    const [isOcrEnabled, setIsOcrEnabled] = useState(true); // OCR 서비스 활성화 여부
 
     const serverURL = "http://localhost:37777";
 

@@ -8,7 +8,7 @@ const LoginPage = ({ setPage }) => {
     const handleLogin = async () => {
         // 간단한 유효성 검사
         if (!id || !password) {
-            setError('이메일과 비밀번호를 입력해주세요.');
+            setError('아이디와 비밀번호를 입력해주세요.');
             return;
         }
 
@@ -31,7 +31,7 @@ const LoginPage = ({ setPage }) => {
                 const data = await response.json();
                 localStorage.setItem("token", data.token); // 토큰을 로컬 스토리지에 저장
                 localStorage.setItem("role", data.user.role); // 사용자 ID를 로컬 스토리지에 저장
-                setPage("dashboard"); // 로그인 성공 시 대시보드 페이지로 이동
+                setPage("validateLogic"); // 로그인 성공 시 대시보드 페이지로 이동
             }
             else {
                 const errorData = await response.text();
@@ -51,12 +51,11 @@ const LoginPage = ({ setPage }) => {
 
     return (
         <div style={{ maxWidth: '400px', margin: '0 auto', textAlign: 'center' }}>
-            <h1>Login Page</h1>
-            <p>Welcome to the login page!</p>
+            <h1 style={{marginBottom: "20px"}}>로그인</h1>
             <div style={{ marginBottom: '16px' }}>
                 <input
                     type="id"
-                    placeholder="이메일"
+                    placeholder="아이디"
                     value={id}
                     onChange={(e) => setId(e.target.value)}
                     style={{

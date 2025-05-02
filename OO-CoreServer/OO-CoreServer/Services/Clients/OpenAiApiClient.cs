@@ -50,12 +50,12 @@ namespace OO_CoreServer.Services.Clients
                     오류 종류에 대한 설명...
                 </div>
 
-                <h3>설명</h3>
+                <h3 style="margin-top: 30px;">설명</h3>
                 <div style="margin: 10px">
                     입력된 문장의 오류에 대한 설명...
                 </div>
 
-                <h3>반박</h3>
+                <h3 style="margin-top: 30px;">반박</h3>
                 <div style="margin: 10px">
                     상황에 맞는 반박문 작성...
                 </div>
@@ -130,6 +130,7 @@ namespace OO_CoreServer.Services.Clients
 }
 
 /*
+ * 설명에 따르면
 gpt-4.5-preview	$75.00	-	최신 프리뷰 모델
 gpt-4o 	        $30.00	$60.00	고성능 모델
 gpt-4o-mini	    $15.00	$60.00	비용 효율적인 소형 모델

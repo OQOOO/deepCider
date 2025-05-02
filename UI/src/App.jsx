@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import Box from '@mui/material/Box';
@@ -15,6 +15,7 @@ import { Login } from '@mui/icons-material';
 import LoginPage from './pages/LoginPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
+import { jwtDecode } from 'jwt-decode';
 
 function Home() {
   const [selectedComponentKey, setSelectedComponentKey] = useState("validateLogic");
@@ -29,39 +30,78 @@ function Home() {
     "adminPage": <AdminPage/>,
   }
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const decoded = jwtDecode(token);
+    const exp = decoded.exp * 1000; // 초 → ms
+    const now = Date.now();
+    const timeout = exp - now;
+
+    if (timeout <= 0) {
+      logout(); // 이미 만료
+    } else {
+      const timer = setTimeout(() => {
+        logout(); // 만료되면 자동 로그아웃
+      }, timeout);
+
+      return () => clearTimeout(timer); // 토큰 변경 시 타이머 해제
+    }
+  }, []);
+  
+  const logout = () => {
+    localStorage.removeItem("token"); // 토큰 제거
+    localStorage.removeItem("role"); // 사용자 역할 제거
+    window.location.reload(); // 페이지 새로고침
+  }
   
   
   const { Header, Content, Sider } = Layout;
   
   const toolNavItems = [
+    // {
+    //   key: 'sub1', // 첫 번째 항목의 key
+    //   icon: React.createElement(UserOutlined),
+    //   label: '소개', // 첫 번째 서브 메뉴 이름
+    //   children: [
+    //     { key: 'dashboard', label: 'dashboard' }, // 첫 번째 서브 메뉴의 첫 번째 항목
+    //   ]
+    // },
+    // {
+    //   key: 'sub2', // 두 번째 항목의 key
+    //   icon: React.createElement(BulbOutlined ),
+    //   label: 'AI 도구',
+    //   children: [
+    //     { key: 'validateLogic', label: '논리적 오류 찾기' },
+    //     { key: 'OCR', label: '글자 추출' },
+    //     { key: 'objectDetection', label: '물체 탐지' },
+    //   ]
+    // },
+    // {
+    //   key: 'sub3',
+    //   icon: React.createElement(CalculatorOutlined ),
+    //   label: '일반 도구',
+    //   children: [
+    //     { key: 'dateCalculator', label: '날짜 계산기' },
+    //     { key: 'tempEmail', label: '임시 이메일' },
+    //   ]
+    // },
     {
-      key: 'sub1', // 첫 번째 항목의 key
-      icon: React.createElement(UserOutlined),
-      label: '소개', // 첫 번째 서브 메뉴 이름
-      children: [
-        { key: 'dashboard', label: 'dashboard' }, // 첫 번째 서브 메뉴의 첫 번째 항목
-      ]
+      icon: React.createElement(NodeIndexOutlined),
+      label: '논리적 오류 찾기',
+      key: 'validateLogic', // 두 번째 항목의 key
     },
     {
-      key: 'sub2', // 두 번째 항목의 key
-      icon: React.createElement(BulbOutlined ),
-      label: 'AI 도구',
-      children: [
-        { key: 'validateLogic', label: '논리적 오류 찾기' },
-        { key: 'OCR', label: '글자 추출' },
-        { key: 'objectDetection', label: '물체 탐지' },
-      ]
+      icon: React.createElement(NodeIndexOutlined),
+      label: '글자 추출',
+      key: 'OCR', // 두 번째 항목의 key
     },
     {
-      key: 'sub3',
-      icon: React.createElement(CalculatorOutlined ),
-      label: '일반 도구',
-      children: [
-        { key: 'dateCalculator', label: '날짜 계산기' },
-        { key: 'tempEmail', label: '임시 이메일' },
-      ]
-    },
-    
+      icon: React.createElement(NodeIndexOutlined),
+      label: '물체 탐지',
+      key: 'objectDetection', // 두 번째 항목의 key
+    }
   ];
 
   const role = localStorage.getItem("role");
@@ -73,9 +113,7 @@ function Home() {
           icon: React.createElement(NodeIndexOutlined),
           label: '로그아웃',
           onClick: () => {
-            localStorage.removeItem("token"); // 토큰 제거
-            localStorage.removeItem("role"); // 사용자 역할 제거
-            window.location.reload(); // 페이지 새로고침
+            logout();
           },
         }
       : {

@@ -21,17 +21,6 @@ namespace OO_CoreServer.Controllers
             _localLLMApiClient = localLLMApiClient;
         }
 
-        // GET: api/<AdminController>
-        [HttpGet("/serviceStatus")]
-        public async Task<IActionResult> GetServiceStatus()
-        {
-            return Ok(new
-            {
-                isChatGPTEnabled = _status.IsChatGPTEnabled,
-                isServerLLMEnabled = _status.IsLocalLLMEnabled,
-            });
-        }
-
         [Authorize(Roles = "admin")]
         [HttpPost("/setServiceStatus/chatGPT")]
         public IActionResult SetChatGPTEnabled([FromBody] bool enabled)

@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import ServerStatusChecker from '../client/ServerStatusChecker.jsx';
 import ServiceCard from '../components/AdminPageComponents/ServiceCard.jsx';
 
 const AdminPage = () => {
-    const [serverStatus, setServerStatus] = useState(null);
+    const [serverStatus, setServerStatus] = useState(false);
     const [serverStatusMessage, setServerStatusMessage] = useState("서버 상태 확인 중...");
 
 
     // 카드별로 각각 서버 체크 등의 기능을 수행하는 컴포넌트로 분리
-    let statusChecker = new ServerStatusChecker();
     useEffect(() => {
         const serverCheck = async () => {
-            await statusChecker.checkServerStatus();
-            setServerStatus(statusChecker); // 서버 상태 업데이트
-            setServerStatusMessage(statusChecker.isServerRunning ? "서버가 정상 작동 중입니다." : "서버가 응답하지 않습니다.");
+
+            try {
+                const response = await fetch("http://localhost:37777/serverHealth");
+                if (!response.ok) throw new Error("서버 응답 오류");
+                const data = await response.json();
+                console.log(data.healthy);
+
+                setServerStatus(data.healthy); // 서버 상태 업데이트
+                setServerStatusMessage("서버가 정상 작동 중입니다."); // 서버 상태 메시지 업데이트  
+            } catch (error) {
+                console.error("서버가 응답하지 않습니다.", error);
+                setServerStatus(false); // 서버가 응답하지 않으면 비활성화
+                setServerStatusMessage("서버가 응답하지 않습니다."); // 서버 상태 메시지 업데이트
+            }
+            
+            console.log("서버 상태:", serverStatus);
         };
         serverCheck();
     }, []);

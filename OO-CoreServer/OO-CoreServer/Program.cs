@@ -45,6 +45,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
+        string jwtSec = System.IO.File.ReadAllText(@"C:\Users\igh07\Desktop\AK\JWTK.txt").Trim();
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -54,7 +55,9 @@ builder.Services.AddAuthentication("Bearer")
 
             ValidIssuer = "yourapp",
             ValidAudience = "yourapp",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("dev_secret_key_for_testing_1234567890!!"))
+
+            
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSec))
         };
     });
 

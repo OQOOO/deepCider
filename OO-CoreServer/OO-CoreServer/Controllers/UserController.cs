@@ -21,6 +21,7 @@ namespace OO_CoreServer.Controllers
         public UserController(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
+            
         }
 
         // GET: api/<UserController>
@@ -79,7 +80,9 @@ namespace OO_CoreServer.Controllers
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("dev_secret_key_for_testing_1234567890!!"));
+            string jwtSec = System.IO.File.ReadAllText(@"C:\Users\igh07\Desktop\AK\JWTK.txt").Trim();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSec));
+
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(

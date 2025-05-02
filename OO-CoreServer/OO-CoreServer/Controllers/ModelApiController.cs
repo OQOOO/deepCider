@@ -97,6 +97,16 @@ namespace OO_CoreServer.Controllers
         //
         string serviceStatus = "/serviceStatus";
 
+        [HttpGet("/serverHealth")]
+        public async Task<IActionResult> ServerHealth()
+        {
+            Console.WriteLine("dfgasgaasf");
+            return Ok(new
+            {
+                healthy = true
+            });
+        }
+
         [HttpGet("/serviceStatus/openAI")]
         public async Task<IActionResult> OpenAIStatus()
         {

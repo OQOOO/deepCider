@@ -7,7 +7,8 @@ import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-import { chatClient } from '../client/chatClient.jsx';
+import { chatGPTClient } from '../client/chatGPTClient.jsx';
+import { deepseekClient } from '../client/deepseekClient.jsx';
 import ServerStatusChecker from '../client/ServerStatusChecker.jsx';
 
 function ValidateLogic() {
@@ -63,7 +64,12 @@ function ValidateLogic() {
         console.log(api);
 
         setViewData(""); // 기존 데이터 초기화
-        chatClient(inputRef.current.value, api, setViewData); // onMessageUpdate로 실시간 업데이트
+        if (selectedService === "ChatGPT") {
+            chatGPTClient(inputRef.current.value, api, setViewData); // onMessageUpdate로 실시간 업데이트     
+        } else if (selectedService === "Deepseek") {
+            deepseekClient(inputRef.current.value, api, setViewData); // onMessageUpdate로 실시간 업데이트
+        }
+        
     };
 
     return (
@@ -145,10 +151,10 @@ function ValidateLogic() {
                                 }}
                             >
                                 <MenuItem value="ChatGPT" disabled={!isChatGPTEnabled}>
-                                    {isChatGPTEnabled ? "ChatGPT" : "ChatGPT (현재 사용 불가)"}
+                                    {isChatGPTEnabled ? "ChatGPT-4o-mini" : "ChatGPT (현재 사용 불가)"}
                                 </MenuItem>
                                 <MenuItem value="Deepseek" disabled={!isDeepseekEnabled}>
-                                    {isDeepseekEnabled ? "Deepseek" : "Deepseek (현재 사용 불가)"}
+                                    {isDeepseekEnabled ? "DeepSeek-R1-Distill-Qwen-1.5B" : "Deepseek (현재 사용 불가)"}
                                 </MenuItem>
                             </Select>
                         </Box>

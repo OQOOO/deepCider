@@ -45,7 +45,7 @@ const SignUpPage = ({ setPage }) => {
 
     return (
         <div style={{ maxWidth: '400px', margin: '0 auto', textAlign: 'center' }}>
-            <h1>회원가입 (임시)</h1>
+            <h1>회원가입</h1>
             <p>Create your account</p>
             <div style={{ marginBottom: '16px' }}>
                 <input
